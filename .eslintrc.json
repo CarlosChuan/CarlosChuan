@@ -1,0 +1,32 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "indent": ["error", "tab"],
+        "@typescript-eslint/indent": ["error", { "useTabs": true, "tabWidth": 2 }],
+        "prettier/prettier": ["error", { "useTabs": true, "tabWidth": 2 }],
+        "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+      }
+    }
+  ],
+  "rules": {
+    "indent": ["error", "tab"],
+    "@typescript-eslint/indent": ["error", "tab"],
+    "prettier/prettier": ["error", { "useTabs": true, "tabWidth": 2 }],
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+  }
+}
