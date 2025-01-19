@@ -1,9 +1,29 @@
+import { useNavigate } from "react-router-dom";
 import { Grid } from "../../../components/shared/Grid";
+import { ROUTE_NAME, routes } from "../../../constants/Routes";
 import { SudokuBoard } from "./SudokuBoard";
 
 export const SudokuProject = () => {
+	const navigate = useNavigate();
 	return (
-		<Grid>
+		<Grid
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				flexGrow: 1,
+			}}
+		>
+			<Grid
+				onClick={() => {
+					navigate(routes.getRoute(ROUTE_NAME.PROJECTS.ROOT));
+				}}
+				style={{
+					cursor: "pointer",
+					width: "fit-content",
+				}}
+			>
+				{`<---`}
+			</Grid>
 			<SudokuBoard />
 		</Grid>
 	);
