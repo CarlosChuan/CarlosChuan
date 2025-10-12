@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "../../../components/shared/Grid";
 import palette from "../../../constants/Colors";
 import { Board, TestBoard } from "./data";
@@ -13,12 +13,24 @@ const CELL_SIDE = (SIDE_LENGTH - MARGIN * 2) / 9;
 
 export const SudokuBoard = () => {
 	const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+	const [selected, setSelected] = useState<{ r: number; c: number } | null>(
+		null,
+	);
 
 	const printBoard = (ctx: CanvasRenderingContext2D, data: Board) => {
 		ctx.clearRect(0, 0, SIDE_LENGTH, SIDE_LENGTH);
 
+		// optional background
 		ctx.fillStyle = "transparent";
 		ctx.fillRect(0, 0, SIDE_LENGTH, SIDE_LENGTH);
+
+		// highlight selected cell (if any)
+		if (selected) {
+			const x = MARGIN + CELL_SIDE * selected.c;
+			const y = MARGIN + CELL_SIDE * selected.r;
+			ctx.fillStyle = `${palette.light.primary20}88`; // semi-transparent highlight
+			ctx.fillRect(x, y, CELL_SIDE, CELL_SIDE);
+		}
 
 		ctx.beginPath();
 		ctx.lineWidth = 4;
@@ -31,7 +43,7 @@ export const SudokuBoard = () => {
 		);
 		ctx.stroke();
 
-		// Print table
+		// Print table lines
 		data.forEach((_row, idx) => {
 			ctx.lineWidth = idx % 3 === 0 ? 4 : 1;
 			ctx.strokeStyle = palette.light.primary20;
@@ -66,21 +78,51 @@ export const SudokuBoard = () => {
 		});
 	};
 
+	// mount: find canvas and set pixel size / CSS size
 	useEffect(() => {
-		const canvas = document.getElementById(
+		const c = document.getElementById(
 			SUDOKU_BOARD_ID,
 		) as HTMLCanvasElement | null;
-		setCanvas(canvas);
-		if (canvas) {
-			const ctx = canvas.getContext("2d");
-			if (ctx) {
-				ctx.canvas.width = SIDE_LENGTH;
-				ctx.canvas.height = SIDE_LENGTH;
-				printBoard(ctx, TestBoard);
-				printData(ctx, TestBoard);
-			}
+		if (c) {
+			// ensure high-DPI crispness
+			c.width = SIDE_LENGTH;
+			c.height = SIDE_LENGTH;
+			c.style.width = "100%";
+			c.style.height = "100%";
+			setCanvas(c);
 		}
 	}, []);
+
+	// redraw whenever canvas or selection changes
+	useEffect(() => {
+		if (!canvas) return;
+		const ctx = canvas.getContext("2d");
+		if (!ctx) return;
+		// ensure internal canvas pixel size remains
+		ctx.canvas.width = SIDE_LENGTH;
+		ctx.canvas.height = SIDE_LENGTH;
+		printBoard(ctx, TestBoard);
+		printData(ctx, TestBoard);
+	}, [canvas, selected]);
+
+	// click handler -> map mouse position to cell index
+	const handleCanvasClick = (ev: React.MouseEvent<HTMLCanvasElement>) => {
+		if (!canvas) return;
+		const rect = canvas.getBoundingClientRect();
+		// account for CSS -> canvas pixels scale
+		const scaleX = canvas.width / rect.width;
+		const scaleY = canvas.height / rect.height;
+		const x = (ev.clientX - rect.left) * scaleX;
+		const y = (ev.clientY - rect.top) * scaleY;
+		const col = Math.floor((x - MARGIN) / CELL_SIDE);
+		const row = Math.floor((y - MARGIN) / CELL_SIDE);
+
+		if (col >= 0 && col < 9 && row >= 0 && row < 9) {
+			setSelected((prev) =>
+				prev && prev.r === row && prev.c === col ? null : { r: row, c: col },
+			);
+		}
+	};
 
 	return (
 		<Grid
@@ -101,7 +143,7 @@ export const SudokuBoard = () => {
 					aspectRatio: 1,
 				}}
 			>
-				<canvas id={SUDOKU_BOARD_ID} />
+				<canvas id={SUDOKU_BOARD_ID} onClick={handleCanvasClick} />
 			</Grid>
 		</Grid>
 	);
