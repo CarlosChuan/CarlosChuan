@@ -50,7 +50,7 @@ export const Header = () => {
 				}}
 			>
 				{Sections.map((section, idx) => (
-					<>
+					<div key={idx}>
 						<HeaderButtons
 							onClick={() => {
 								navigate(section.url);
@@ -59,7 +59,7 @@ export const Header = () => {
 							{section.label}
 						</HeaderButtons>
 						{idx !== Sections.length - 1 && <HSpacer medium />}
-					</>
+					</div>
 				))}
 			</Grid>
 		</Grid>

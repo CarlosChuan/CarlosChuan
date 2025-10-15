@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Grid } from "../../../components/shared/Grid";
 import palette from "../../../constants/Colors";
-import { Board, TestBoard } from "./data";
+import { SudokuBoard } from "../../../domains/Sudoku/SudokuBoard";
 
 const SUDOKU_BOARD_ID = "sudoku-board";
 const SIDE_LENGTH =
@@ -11,13 +11,19 @@ const SIDE_LENGTH =
 const MARGIN = 2;
 const CELL_SIDE = (SIDE_LENGTH - MARGIN * 2) / 9;
 
-export const SudokuBoard = () => {
+export const SudokuBoardComponent = () => {
 	const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 	const [selected, setSelected] = useState<{ r: number; c: number } | null>(
 		null,
 	);
+	const [sudokuBoard, setSudokuBoard] = useState<SudokuBoard>(
+		SudokuBoard.createEmptyBoard(),
+	);
 
-	const printBoard = (ctx: CanvasRenderingContext2D, data: Board) => {
+	const printBoard = (
+		ctx: CanvasRenderingContext2D,
+		sudokuBoard: SudokuBoard,
+	) => {
 		ctx.clearRect(0, 0, SIDE_LENGTH, SIDE_LENGTH);
 
 		// optional background
@@ -44,7 +50,7 @@ export const SudokuBoard = () => {
 		ctx.stroke();
 
 		// Print table lines
-		data.forEach((_row, idx) => {
+		sudokuBoard.board.forEach((_row, idx) => {
 			ctx.lineWidth = idx % 3 === 0 ? 4 : 1;
 			ctx.strokeStyle = palette.light.primary20;
 			const padding = MARGIN + CELL_SIDE * idx;
@@ -60,14 +66,17 @@ export const SudokuBoard = () => {
 		});
 	};
 
-	const printData = (ctx: CanvasRenderingContext2D, board: Board) => {
+	const printData = (
+		ctx: CanvasRenderingContext2D,
+		sudokuBoard: SudokuBoard,
+	) => {
 		ctx.font = "5vmin Arial";
 		ctx.fillStyle = `${palette.light.white}DD`;
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
 
 		// Print each row
-		board.forEach((row, rowIdx) => {
+		sudokuBoard.board.forEach((row, rowIdx) => {
 			row.forEach((value, valueIdx) => {
 				ctx.fillText(
 					`${value}`,
@@ -77,6 +86,14 @@ export const SudokuBoard = () => {
 			});
 		});
 	};
+
+	// ref to hold latest selected value for stable event handler
+	const selectedRef = useRef<{ r: number; c: number } | null>(null);
+
+	// keep ref in sync with state
+	useEffect(() => {
+		selectedRef.current = selected;
+	}, [selected]);
 
 	// mount: find canvas and set pixel size / CSS size
 	useEffect(() => {
@@ -91,6 +108,12 @@ export const SudokuBoard = () => {
 			c.style.height = "100%";
 			setCanvas(c);
 		}
+
+		// keyboard input
+		document.addEventListener("keydown", manageKeyboardInput);
+		return () => {
+			document.removeEventListener("keydown", manageKeyboardInput);
+		};
 	}, []);
 
 	// redraw whenever canvas or selection changes
@@ -101,11 +124,25 @@ export const SudokuBoard = () => {
 		// ensure internal canvas pixel size remains
 		ctx.canvas.width = SIDE_LENGTH;
 		ctx.canvas.height = SIDE_LENGTH;
-		printBoard(ctx, TestBoard);
-		printData(ctx, TestBoard);
-	}, [canvas, selected]);
+		printBoard(ctx, sudokuBoard);
+		printData(ctx, sudokuBoard);
+	}, [canvas, selected, sudokuBoard]);
 
-	// click handler -> map mouse position to cell index
+	const manageKeyboardInput = (event: KeyboardEvent) => {
+		const keyValue = Number(event.key);
+		const selected = selectedRef.current;
+
+		if (keyValue) {
+			if (selected) {
+				// Update the selected cell with the new value
+				setSudokuBoard((prevBoard) => {
+					prevBoard.board[selected.r][selected.c] = keyValue;
+					return prevBoard;
+				});
+			}
+		}
+	};
+
 	const handleCanvasClick = (ev: React.MouseEvent<HTMLCanvasElement>) => {
 		if (!canvas) return;
 		const rect = canvas.getBoundingClientRect();
