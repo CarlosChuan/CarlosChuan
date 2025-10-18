@@ -21,6 +21,7 @@ export const VSpacer = ({ small, medium, large, custom }: VSpacerProps) => {
 		<div
 			style={{
 				height,
+				minHeight: height,
 			}}
 		/>
 	);

@@ -1,4 +1,4 @@
-type BoardValue = number | "*";
+export type BoardValue = number | null;
 type BoardRow = [
 	BoardValue,
 	BoardValue,

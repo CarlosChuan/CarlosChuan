@@ -21,6 +21,7 @@ export const HSpacer = ({ small, medium, large, custom }: HSpacerProps) => {
 		<div
 			style={{
 				width,
+				minWidth: width,
 			}}
 		/>
 	);

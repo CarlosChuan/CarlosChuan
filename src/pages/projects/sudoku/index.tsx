@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Grid } from "../../../components/shared/Grid";
 import { ROUTE_NAME, routes } from "../../../constants/Routes";
-import { SudokuBoardComponent } from "./SudokuBoard";
+import { SudokuBoardComponent } from "./BoardComponent";
 
 export const SudokuProject = () => {
 	const navigate = useNavigate();
