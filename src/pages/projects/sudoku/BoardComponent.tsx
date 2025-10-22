@@ -38,6 +38,17 @@ export const SudokuBoardComponent = () => {
 		null,
 	);
 
+	const paintCell = (
+		ctx: CanvasRenderingContext2D,
+		coord: { row: number; col: number },
+		color: string,
+	) => {
+		const x = MARGIN + CELL_SIDE * coord.col;
+		const y = MARGIN + CELL_SIDE * coord.row;
+		ctx.fillStyle = color;
+		ctx.fillRect(x, y, CELL_SIDE, CELL_SIDE);
+	};
+
 	const printBoard = (
 		ctx: CanvasRenderingContext2D,
 		sudokuBoard: SudokuBoard,
@@ -50,14 +61,77 @@ export const SudokuBoardComponent = () => {
 
 		// highlight selected cell (if any)
 		if (selectedRef.current) {
-			const x = MARGIN + CELL_SIDE * selectedRef.current.col;
-			const y = MARGIN + CELL_SIDE * selectedRef.current.row;
-			if (invalidMove) {
-				ctx.fillStyle = `${palette.light.error}88`; // semi-transparent highlight
-			} else {
-				ctx.fillStyle = `${palette.light.primary20}88`; // semi-transparent highlight
+			const selected = selectedRef.current;
+
+			const cellsToPaint = new Set<string>();
+
+			for (let i = 0; i < 9; i++) {
+				cellsToPaint.add(`${i}${selected.col}`);
+				cellsToPaint.add(`${selected.row}${i}`);
 			}
-			ctx.fillRect(x, y, CELL_SIDE, CELL_SIDE);
+
+			const quadrantCoords = [
+				Math.floor(selected.row / 3),
+				Math.floor(selected.col / 3),
+			];
+			const quadrantCellsRange = {
+				rows: [quadrantCoords[0] * 3, (quadrantCoords[0] + 1) * 3],
+				cols: [quadrantCoords[1] * 3, (quadrantCoords[1] + 1) * 3],
+			};
+
+			for (
+				let row = quadrantCellsRange.rows[0];
+				row < quadrantCellsRange.rows[1];
+				row++
+			) {
+				for (
+					let col = quadrantCellsRange.cols[0];
+					col < quadrantCellsRange.cols[1];
+					col++
+				) {
+					cellsToPaint.add(`${row}${col}`);
+				}
+			}
+
+			cellsToPaint.forEach((coord) => {
+				const row = Number(coord[0]);
+				const col = Number(coord[1]);
+				paintCell(
+					ctx,
+					{
+						row,
+						col,
+					},
+					`${palette.light.primary20}20`,
+				);
+			});
+
+			paintCell(
+				ctx,
+				{
+					row: selected.row,
+					col: selected.col,
+				},
+				invalidMove
+					? `${palette.light.error}88`
+					: `${palette.light.primary20}88`,
+			);
+
+			const selectedValue = sudokuBoard.board[selected.row][selected.col];
+
+			if (selectedValue) {
+				const coords = sudokuBoard.board
+					.flatMap((row, i) =>
+						row.map((val, j) =>
+							val === selectedValue ? { row: i, col: j } : null,
+						),
+					)
+					.filter(Boolean);
+
+				coords.forEach((coord) => {
+					paintCell(ctx, coord!, `${palette.light.primary00}88`);
+				});
+			}
 		}
 
 		ctx.beginPath();
@@ -92,7 +166,6 @@ export const SudokuBoardComponent = () => {
 		ctx: CanvasRenderingContext2D,
 		sudokuBoard: SudokuBoard,
 	) => {
-		ctx.fillStyle = `${palette.light.white}DD`;
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
 
@@ -100,6 +173,8 @@ export const SudokuBoardComponent = () => {
 		sudokuBoard.board.forEach((row, rowIdx) => {
 			row.forEach((value, colIdx) => {
 				const isInitial = sudokuBoard.isInitialValue(rowIdx, colIdx);
+
+				ctx.fillStyle = `${palette.light.white}DD`;
 
 				if (isInitial) {
 					ctx.font = "bold 5vmin Arial";
@@ -280,6 +355,7 @@ export const SudokuBoardComponent = () => {
 								);
 								setSolveIterator(iterator);
 							}}
+							style={{ cursor: "pointer" }}
 						>
 							Solve
 						</Grid>
@@ -306,6 +382,7 @@ export const SudokuBoardComponent = () => {
 								sudokuBoard.current = SudokuBoard.create(board);
 								repaintCanvas();
 							}}
+							style={{ cursor: "pointer" }}
 						>
 							Generate random
 						</Grid>
@@ -317,6 +394,7 @@ export const SudokuBoardComponent = () => {
 								sudokuBoard.current = SudokuBoard.create(easyBoard);
 								repaintCanvas();
 							}}
+							style={{ cursor: "pointer" }}
 						>
 							Generate easy
 						</Grid>
@@ -328,6 +406,7 @@ export const SudokuBoardComponent = () => {
 								sudokuBoard.current = SudokuBoard.create(mediumBoard);
 								repaintCanvas();
 							}}
+							style={{ cursor: "pointer" }}
 						>
 							Generate medium
 						</Grid>
@@ -339,6 +418,7 @@ export const SudokuBoardComponent = () => {
 								sudokuBoard.current = SudokuBoard.create(extremeBoard);
 								repaintCanvas();
 							}}
+							style={{ cursor: "pointer" }}
 						>
 							Generate dificult
 						</Grid>
@@ -356,6 +436,7 @@ export const SudokuBoardComponent = () => {
 								sudokuBoard.current.clear();
 								repaintCanvas();
 							}}
+							style={{ cursor: "pointer" }}
 						>
 							Clear
 						</Grid>
