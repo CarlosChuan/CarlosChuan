@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Grid } from "../../../components/shared/Grid";
-import { Text } from "../../../components/shared/Text";
-import palette from "../../../constants/Colors";
+import { Grid } from "../../../../components/shared/Grid";
+import { Text } from "../../../../components/shared/Text";
+import palette from "../../../../constants/Colors";
 
 interface CompletionModalProps {
 	isOpen: boolean;

@@ -1,4 +1,4 @@
-type ProjectRouteNames = "project_root" | "sudoku" | "processor";
+type ProjectRouteNames = "project_root" | "sudoku" | "computer_sim";
 type GeneralRouteNames = "bio";
 type HomeRouteNames = "home_root";
 
@@ -50,7 +50,7 @@ class Routing {
 
 	/**
 	 * It returns the value of the routeName specified. Used when creating the component tree based on the route.
-	 * For example, if asking for the routeName of sudoku from the project secitons, it would give (in v0.1.0)
+	 * For example, if asking for the routeName of sudoku from the project sections, it would give (in v0.1.0)
 	 * "/sudoku" if isWrapper = false || "/sudoku/*" if isWrapper = true
 	 *
 	 * @param routeName The id of the route value
@@ -105,6 +105,10 @@ class Routing {
 							id: "sudoku",
 							value: "sudoku",
 						},
+						{
+							id: "computer_sim",
+							value: "computer_sim",
+						},
 					],
 				},
 				{
@@ -125,7 +129,7 @@ export const ROUTE_NAME = {
 	PROJECTS: {
 		ROOT: "project_root" as RouteNames,
 		SUDOKU: "sudoku" as RouteNames,
-		PROCESSOR: "processor" as RouteNames,
+		COMPUTER_SIM: "computer_sim" as RouteNames,
 	},
 	GENERAL: {
 		BIO: "bio" as RouteNames,

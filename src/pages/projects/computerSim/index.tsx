@@ -1,17 +1,13 @@
 import { Grid } from "../../../components/shared/Grid";
-import { SudokuBoardComponent } from "./components/BoardComponent";
 
-export const SudokuProject = () => {
+export const ComputerSimProject = () => {
 	return (
 		<Grid
 			style={{
 				display: "flex",
 				flexDirection: "column",
 				flexGrow: 1,
-				height: "100%",
 			}}
-		>
-			<SudokuBoardComponent />
-		</Grid>
+		></Grid>
 	);
 };
