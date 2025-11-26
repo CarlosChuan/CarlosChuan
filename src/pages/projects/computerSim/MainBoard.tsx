@@ -1,5 +1,9 @@
-import { Grid } from "../../../components/shared/Grid";
+import { GridCanvas } from "./components/GridCanvas";
 
 export const MainBoard = () => {
-	return <Grid></Grid>;
+	return (
+		<>
+			<GridCanvas />
+		</>
+	);
 };

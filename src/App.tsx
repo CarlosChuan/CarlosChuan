@@ -12,7 +12,7 @@ const AppWrapper = ({ children }: React.PropsWithChildren) => {
 				flexDirection: "column",
 				position: "absolute",
 				inset: 0,
-				overflowY: "scroll",
+				overflowY: "auto",
 				backgroundColor: palette.light.black,
 				color: palette.light.white,
 			}}

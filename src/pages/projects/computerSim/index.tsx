@@ -1,4 +1,6 @@
 import { Grid } from "../../../components/shared/Grid";
+import palette from "../../../constants/Colors";
+import { MainBoard } from "./MainBoard";
 
 export const ComputerSimProject = () => {
 	return (
@@ -7,7 +9,10 @@ export const ComputerSimProject = () => {
 				display: "flex",
 				flexDirection: "column",
 				flexGrow: 1,
+				backgroundColor: palette.light.secondary00,
 			}}
-		></Grid>
+		>
+			<MainBoard />
+		</Grid>
 	);
 };
