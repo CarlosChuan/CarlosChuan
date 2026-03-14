@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import palette from "../../../../constants/Colors";
+import { Position } from "../domains/Position";
+import { ComputerSimElement } from "../domains/ComputerSimElement";
+import { ValueSource } from "../domains/simComponents/ValueSource";
+import "../assets/styles/iconColors.css";
+import wireNodeTrue from "../assets/svg/components/wire_node/wire_node_true.svg";
+import wireNodeFalse from "../assets/svg/components/wire_node/wire_node_false.svg";
 
-interface Position {
-	x: number;
-	y: number;
-}
+const SVG_SIZE = 50;
 
 export const GridCanvas = () => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -13,16 +16,25 @@ export const GridCanvas = () => {
 		initialCameraPosition: Position;
 	} | null>(null);
 	const cameraPosition = useRef<Position>({ x: 0, y: 0 });
+	const imageCache = useRef<Map<string, HTMLImageElement>>(new Map());
 
 	const [canvaSize, setCameraArea] = useState({
 		width: window.innerWidth,
 		height: window.innerHeight - 64, // windowHeight - headerHeight
 	});
 	const [isMouseDown, setIsMouseDown] = useState(false);
+	const [simElements, setSimElements] = useState<ComputerSimElement[]>([
+		new ValueSource({
+			name: "test",
+			inputs: [],
+			outputs: [],
+			position: { x: 0, y: 0 },
+		}),
+	]);
 
 	useEffect(() => {
 		if (!canvasRef.current) return;
-		initCanvas(canvasRef.current);
+		printCanvas(canvasRef.current);
 	});
 
 	// START --- Event management ---
@@ -47,7 +59,7 @@ export const GridCanvas = () => {
 				x: initialCameraPosition.x + dragVector.x,
 				y: initialCameraPosition.y + dragVector.y,
 			};
-			initCanvas(canvasRef.current!);
+			printCanvas(canvasRef.current!);
 		}
 	}, []);
 
@@ -57,6 +69,39 @@ export const GridCanvas = () => {
 
 	const mouseUpFunction = useCallback(() => {
 		setIsMouseDown(false);
+	}, []);
+
+	const clickFunction = useCallback((event: PointerEvent) => {
+		const relativeClickPosition = {
+			x:
+				event.offsetX +
+				cameraPosition.current.x -
+				(canvasRef.current?.width ?? 0) / 2,
+			y:
+				event.offsetY +
+				cameraPosition.current.y -
+				(canvasRef.current?.height ?? 0) / 2,
+		};
+
+		// Trigger inner click function and rerender if any returns true.
+		const elementsClicked = simElements
+			.map((element) =>
+				element.position.x < relativeClickPosition.x &&
+				element.position.x + SVG_SIZE > relativeClickPosition.x &&
+				element.position.y < relativeClickPosition.y &&
+				element.position.y + SVG_SIZE > relativeClickPosition.y
+					? element
+					: null,
+			)
+			.filter((element) => !!element);
+
+		const elementsToReRender = elementsClicked
+			.map((element) => element.onClick())
+			.filter((element) => !!element);
+
+		if (elementsToReRender.length > 0 && canvasRef.current) {
+			printCanvas(canvasRef.current);
+		}
 	}, []);
 
 	useEffect(() => {
@@ -69,7 +114,7 @@ export const GridCanvas = () => {
 		} else {
 			moveValues.current = null;
 			canvas.removeEventListener("mousemove", mouseMoveFunction);
-			canvas.style.cursor = "grab";
+			canvas.style.cursor = "default";
 		}
 
 		return () => {
@@ -90,14 +135,22 @@ export const GridCanvas = () => {
 	const initEvents = (canvas: HTMLCanvasElement) => {
 		canvas.addEventListener("mousedown", mouseDownFunction);
 		document.addEventListener("mouseup", mouseUpFunction);
+		canvas.addEventListener("click", clickFunction);
 	};
 
 	const clearEvents = (canvas: HTMLCanvasElement) => {
 		canvas.removeEventListener("mousedown", mouseDownFunction);
 		document.removeEventListener("mouseup", mouseUpFunction);
+		canvas.removeEventListener("click", clickFunction);
 	};
 
 	// END --- Event management ---
+
+	useEffect(() => {
+		// Init global images
+		getImage(wireNodeTrue);
+		getImage(wireNodeFalse);
+	}, []);
 
 	const getCoordinates = (wantedCoords: Position): Position => {
 		return {
@@ -106,7 +159,7 @@ export const GridCanvas = () => {
 		};
 	};
 
-	const initCanvas = (canvas: HTMLCanvasElement) => {
+	const printCanvas = (canvas: HTMLCanvasElement) => {
 		const ctx = canvas.getContext("2d");
 
 		if (!ctx) return;
@@ -118,24 +171,57 @@ export const GridCanvas = () => {
 
 		ctx.clearRect(0, 0, canvaSize.width, canvaSize.height);
 
-		ctx.lineWidth = 2;
-		ctx.strokeStyle = palette.light.primary30;
+		printElements(ctx);
+	};
 
-		const rectCoord = getCoordinates({ x: 10, y: 10 });
-		ctx.beginPath();
-		ctx.rect(rectCoord.x, rectCoord.y, 10, 10);
-		ctx.stroke();
+	const printElements = (ctx: CanvasRenderingContext2D) => {
+		simElements.forEach((element) => {
+			const { svgSrc } = element.getCanvaElement();
 
-		const relativeCenter = getCoordinates({ x: 0, y: 0 });
-		ctx.beginPath();
-		ctx.moveTo(0, relativeCenter.y);
-		ctx.lineTo(canvaSize.width, relativeCenter.y);
-		ctx.stroke();
+			const { img, new: newImage } = getImage(svgSrc);
 
-		ctx.beginPath();
-		ctx.moveTo(relativeCenter.x, 0);
-		ctx.lineTo(relativeCenter.x, canvaSize.height);
-		ctx.stroke();
+			const position = getCoordinates(element.position);
+			ctx.drawImage(img!, position.x, position.y, SVG_SIZE, SVG_SIZE);
+
+			const { img: wireNodeTrueImg } = getImage(wireNodeTrue);
+			const { img: wireNodeFalseImg } = getImage(wireNodeFalse);
+
+			if (element.outputs.length > 0) {
+				const dividedHeight = SVG_SIZE / element.outputs.length;
+				element.outputs.forEach((output, idx, outputs) => {
+					console.log("CREATING OUTPUT NODE", idx, output);
+					const outputPosition = getCoordinates({
+						x: element.position.x + SVG_SIZE,
+						y: element.position.y + dividedHeight * idx,
+					});
+					ctx.drawImage(
+						output.value ? wireNodeTrueImg : wireNodeFalseImg,
+						outputPosition.x,
+						outputPosition.y,
+						10,
+						10,
+					);
+				});
+			}
+		});
+	};
+
+	const getImage = (
+		imgSrc: string,
+	): { img: HTMLImageElement; new: boolean } => {
+		let img = imageCache.current.get(imgSrc);
+
+		if (!img) {
+			// Create and cache the image if not already loaded
+			img = new Image();
+			img.onload = () => {
+				// Store in cache once loaded
+				imageCache.current.set(imgSrc, img!);
+			};
+			img.src = imgSrc;
+			return { img, new: true };
+		}
+		return { img, new: false };
 	};
 
 	return (
