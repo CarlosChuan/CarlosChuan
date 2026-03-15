@@ -87,9 +87,9 @@ export const GridCanvas = () => {
 		const elementsClicked = simElements
 			.map((element) =>
 				element.position.x < relativeClickPosition.x &&
-				element.position.x + SVG_SIZE > relativeClickPosition.x &&
-				element.position.y < relativeClickPosition.y &&
-				element.position.y + SVG_SIZE > relativeClickPosition.y
+					element.position.x + SVG_SIZE > relativeClickPosition.x &&
+					element.position.y < relativeClickPosition.y &&
+					element.position.y + SVG_SIZE > relativeClickPosition.y
 					? element
 					: null,
 			)
@@ -189,7 +189,6 @@ export const GridCanvas = () => {
 			if (element.outputs.length > 0) {
 				const dividedHeight = SVG_SIZE / element.outputs.length;
 				element.outputs.forEach((output, idx, outputs) => {
-					console.log("CREATING OUTPUT NODE", idx, output);
 					const outputPosition = getCoordinates({
 						x: element.position.x + SVG_SIZE,
 						y: element.position.y + dividedHeight * idx,

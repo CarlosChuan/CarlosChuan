@@ -35,7 +35,6 @@ export class ValueSource extends ComputerSimElement {
 	}
 
 	override onClick = () => {
-		console.log("triggering click function");
 		if (!this.value) {
 			this.value = true;
 			this.iconSrc = sourceIconTrue;

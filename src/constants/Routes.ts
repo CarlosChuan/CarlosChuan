@@ -1,4 +1,4 @@
-type ProjectRouteNames = "project_root" | "sudoku" | "computer_sim";
+type ProjectRouteNames = "project_root" | "sudoku" | "computer_sim" | "cpu_sim";
 type GeneralRouteNames = "bio";
 type HomeRouteNames = "home_root";
 
@@ -109,6 +109,10 @@ class Routing {
 							id: "computer_sim",
 							value: "computer_sim",
 						},
+						{
+							id: "cpu_sim",
+							value: "cpu_sim",
+						},
 					],
 				},
 				{
@@ -130,6 +134,7 @@ export const ROUTE_NAME = {
 		ROOT: "project_root" as RouteNames,
 		SUDOKU: "sudoku" as RouteNames,
 		COMPUTER_SIM: "computer_sim" as RouteNames,
+		CPU_SIM: "cpu_sim" as RouteNames,
 	},
 	GENERAL: {
 		BIO: "bio" as RouteNames,

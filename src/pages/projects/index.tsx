@@ -3,6 +3,7 @@ import { ROUTE_NAME, routes } from "../../constants/Routes";
 import { ComputerSimProject } from "./computerSim";
 import { ProjectMenu } from "./ProjectMenu";
 import { SudokuProject } from "./sudoku";
+import { CPUProject } from "./CPU";
 
 export const ProjectRoot = () => {
 	return (
@@ -16,6 +17,10 @@ export const ProjectRoot = () => {
 				<Route
 					path={routes.getValue(ROUTE_NAME.PROJECTS.COMPUTER_SIM)}
 					element={<ComputerSimProject />}
+				/>
+				<Route
+					path={routes.getValue(ROUTE_NAME.PROJECTS.CPU_SIM)}
+					element={<CPUProject />}
 				/>
 				<Route
 					path={"*"}

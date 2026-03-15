@@ -57,6 +57,14 @@ export const ProjectMenu = () => {
 			status: "in-progress",
 			route: routes.getRoute(ROUTE_NAME.PROJECTS.COMPUTER_SIM),
 		},
+		{
+			id: "cpu-sim",
+			title: "Basic CPU simulator",
+			description:
+				"A basic CPU design. It's a WIP project that will be growing slowly.",
+			status: "in-progress",
+			route: routes.getRoute(ROUTE_NAME.PROJECTS.CPU_SIM),
+		},
 	];
 
 	return (

@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Grid } from "./components/shared/Grid";
 import palette from "./constants/Colors";
@@ -25,18 +26,20 @@ const AppWrapper = ({ children }: React.PropsWithChildren) => {
 const App = () => {
 	return (
 		<AppWrapper>
-			<BrowserRouter>
-				<Routes>
-					<Route
-						path={routes.getValue(ROUTE_NAME.ROOT, true)}
-						element={<Root />}
-					/>
-					<Route
-						path={"*"}
-						element={<Navigate to={routes.getRoute(ROUTE_NAME.ROOT)} />}
-					/>
-				</Routes>
-			</BrowserRouter>
+			<QueryClientProvider client={new QueryClient}>
+				<BrowserRouter>
+					<Routes>
+						<Route
+							path={routes.getValue(ROUTE_NAME.ROOT, true)}
+							element={<Root />}
+						/>
+						<Route
+							path={"*"}
+							element={<Navigate to={routes.getRoute(ROUTE_NAME.ROOT)} />}
+						/>
+					</Routes>
+				</BrowserRouter>
+			</QueryClientProvider>
 		</AppWrapper>
 	);
 };
