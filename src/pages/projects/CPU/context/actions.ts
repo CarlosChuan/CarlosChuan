@@ -1,11 +1,13 @@
 import { Instruction } from "../domains/instruction/Instruction";
-import { Signed8Int } from "../domains/Signed8Int";
+import { MemoryCell } from "../domains/MemoryCell";
+import { ViewStyle } from "./reducer";
 
 export enum CPUActionType {
   UPDATE_PC = `UPDATE_PC`,
   SET_INSTR = `SET_INSTR`,
   SET_MEMORY = `SET_MEMORY`,
   SET_REGBANK = `SET_REGBANK`,
+  SET_VIEW_STYLE = "SET_VIEW_STYLE"
 }
 
 export interface UpdatePCAction {
@@ -20,14 +22,19 @@ export interface SetInstrAction {
 
 export interface SetMemoryAction {
   type: CPUActionType.SET_MEMORY;
-  payload: Signed8Int[];
+  payload: MemoryCell[];
 }
 
 
 export interface SetRegBankAction {
   type: CPUActionType.SET_REGBANK;
-  payload: Signed8Int[];
+  payload: MemoryCell[];
+}
+
+export interface SetViewStyle {
+  type: CPUActionType.SET_VIEW_STYLE;
+  payload: ViewStyle;
 }
 
 
-export type CPUActions = UpdatePCAction | SetInstrAction | SetMemoryAction | SetRegBankAction;
+export type CPUActions = UpdatePCAction | SetInstrAction | SetMemoryAction | SetRegBankAction | SetViewStyle;

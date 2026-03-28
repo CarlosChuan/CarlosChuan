@@ -5,11 +5,12 @@ import palette from "../../../../constants/Colors";
 import { numToHex } from "../../../../helpers/strings";
 import { Instruction } from "../domains/instruction/Instruction";
 import { useRetrieveInstructionRegisters } from "../hooks/useRetrieveInstructionRegisters";
+import { useViewStyle } from "../hooks/useViewStyle";
 
 export const InstructionRegister = () => {
   const [instructions, setInstructions] = useState<Instruction[]>([])
-  const [viewStyle, setViewStyle] = useState<"raw" | "readable">("raw");
 
+  const { data: viewStyle } = useViewStyle();
   const { data: instructionRegister, isLoading } = useRetrieveInstructionRegisters();
 
   useEffect(() => {
@@ -76,13 +77,6 @@ export const InstructionRegister = () => {
       <Text style={{ color: palette.light.black, textAlign: "center" }}>
         Instruction Register
       </Text>
-      <Grid
-        onClick={() => { setViewStyle((value) => value === "raw" ? "readable" : "raw") }}
-        style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", height: "1em", marginBottom: "4px", cursor: "pointer" }}
-      >
-        <Grid style={{ width: "8px", height: "8px", border: `1px solid ${palette.light.black}`, backgroundColor: viewStyle === "raw" ? "transparent" : palette.light.secondary10, marginRight: "4px" }} />
-        <Text style={{ color: palette.light.black, userSelect: "none", cursor: "pointer" }}>{`Readable view style`}</Text>
-      </Grid>
       <Grid style={{ overflowY: "scroll" }}>
         {isLoading && "LOADING..."}
         {!isLoading && viewStyle === "raw" ? rawInstructionsComponent : readableInstructionsComponent}

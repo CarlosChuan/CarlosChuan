@@ -5,7 +5,7 @@ import { StepCoordinator } from './StepCoordinator';
 
 export const CPUContext = createContext({
   state: {} as CPUState,
-  dispatch: (action: CPUActions) => {
+  dispatch: (_: CPUActions) => {
     // Do nothing
   },
   stepCoordinator: new StepCoordinator(),

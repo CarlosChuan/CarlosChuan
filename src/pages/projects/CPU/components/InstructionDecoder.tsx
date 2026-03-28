@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Grid } from "../../../../components/shared/Grid";
 import { Text } from "../../../../components/shared/Text";
 import palette from "../../../../constants/Colors";
@@ -9,10 +8,10 @@ import { useRetrieveInstruction } from "../hooks/useRetrieveInstruction";
 import { useRetrieveMemoryData } from "../hooks/useRetrieveMemoryData";
 import { useRetrieveRegisterBank } from "../hooks/useRetrieveRegisterBank";
 import { useStepHandler } from "../hooks/useStepHandler";
+import { useViewStyle } from "../hooks/useViewStyle";
 
 export const InstructionDecoder = () => {
-  const [viewStyle, setViewStyle] = useState<"raw" | "readable">("raw");
-
+  const { data: viewStyle } = useViewStyle();
   const { data: instruction } = useRetrieveInstruction();
   const { data: memoryData, setData: setMemoryData } = useRetrieveMemoryData();
   const { data: registerBank, setData: setRegisterBank } = useRetrieveRegisterBank();
@@ -103,13 +102,6 @@ export const InstructionDecoder = () => {
       <Text style={{ color: palette.light.black, textAlign: "center" }}>
         Instruction Decoder
       </Text>
-      <Grid
-        onClick={() => { setViewStyle((value) => value === "raw" ? "readable" : "raw") }}
-        style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", height: "1em", marginBottom: "6px", cursor: "pointer" }}
-      >
-        <Grid style={{ width: "8px", height: "8px", border: `1px solid ${palette.light.black}`, backgroundColor: viewStyle === "raw" ? "transparent" : palette.light.secondary10, marginRight: "4px" }} />
-        <Text style={{ color: palette.light.black, userSelect: "none", cursor: "pointer" }}>{`Readable view style`}</Text>
-      </Grid>
       <Grid style={{ width: "fit-content", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingBottom: 10 }}>
         {lineText(`Instr: ${instruction.rawInstruction}`)}
         {lineText(`OP: ${instruction.operation}`)}

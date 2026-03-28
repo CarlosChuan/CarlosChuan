@@ -2,15 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { CPUActionType } from "../context/actions";
 import { useCPUContext } from "../context/context";
-import { Signed8Int } from "../domains/Signed8Int";
+import { MemoryCell } from "../domains/MemoryCell";
 
 const MEMORY_PATH = "/data/cpu/memory.json"
 
 interface RetrieveMemoryDataResponse {
-  data: Signed8Int[];
+  data: MemoryCell[];
   isLoading: boolean;
   refetch: () => void;
-  setData: (newData: Signed8Int[]) => void;
+  setData: (newData: MemoryCell[]) => void;
 }
 
 export const useRetrieveMemoryData = (): RetrieveMemoryDataResponse => {
@@ -26,7 +26,7 @@ export const useRetrieveMemoryData = (): RetrieveMemoryDataResponse => {
           console.error("Memory JSON must be an array");
           return [];
         }
-        const data = jsonData.map((value) => new Signed8Int(value));
+        const data = jsonData.map((value, idx) => new MemoryCell(idx ,value));
         return data;
       } catch (error) {
         console.error(error)
@@ -39,7 +39,7 @@ export const useRetrieveMemoryData = (): RetrieveMemoryDataResponse => {
   })
 
   useEffect(() => {
-    if (data && data.map((val) => val.rawInt) !== state.memory.map((val) => val.rawInt)) {
+    if (data && data.map((val) => val.value.rawInt) !== state.memory.map((val) => val.value.rawInt)) {
       dispatch({
         type: CPUActionType.SET_MEMORY,
         payload: data,
@@ -47,7 +47,7 @@ export const useRetrieveMemoryData = (): RetrieveMemoryDataResponse => {
     }
   }, [data])
 
-  const setData = (newData: Signed8Int[]) => {
+  const setData = (newData: MemoryCell[]) => {
     dispatch({
       type: CPUActionType.SET_MEMORY,
       payload: newData,

@@ -2,15 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { CPUActionType } from "../context/actions";
 import { useCPUContext } from "../context/context";
-import { Signed8Int } from "../domains/Signed8Int";
+import { MemoryCell } from "../domains/MemoryCell";
 
 const RB_PATH = "/data/cpu/registerBank.json"
 
 interface RetrieveRegisterBankResponse {
-  data: Signed8Int[];
+  data: MemoryCell[];
   isLoading: boolean;
   refetch: () => void;
-  setData: (newData: Signed8Int[]) => void;
+  setData: (newData: MemoryCell[]) => void;
 }
 
 export const useRetrieveRegisterBank = (): RetrieveRegisterBankResponse => {
@@ -26,7 +26,7 @@ export const useRetrieveRegisterBank = (): RetrieveRegisterBankResponse => {
           console.error("Register bank JSON must be an array");
           return [];
         }
-        const data = jsonData.map((value) => new Signed8Int(value));
+        const data = jsonData.map((value, idx) => new MemoryCell(idx, value));
         return data;
       } catch (error) {
         console.error(error)
@@ -39,7 +39,7 @@ export const useRetrieveRegisterBank = (): RetrieveRegisterBankResponse => {
   })
 
   useEffect(() => {
-    if (data && data.map((val) => val.rawInt) !== state.registerBank.map((val) => val.rawInt)) {
+    if (data && data.map((val) => val.value.rawInt) !== state.registerBank.map((val) => val.value.rawInt)) {
       dispatch({
         type: CPUActionType.SET_REGBANK,
         payload: data,
@@ -47,7 +47,7 @@ export const useRetrieveRegisterBank = (): RetrieveRegisterBankResponse => {
     }
   }, [data])
 
-  const setData = (newData: Signed8Int[]) => {
+  const setData = (newData: MemoryCell[]) => {
     dispatch({
       type: CPUActionType.SET_REGBANK,
       payload: newData,

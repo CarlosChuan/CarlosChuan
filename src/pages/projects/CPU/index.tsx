@@ -28,12 +28,14 @@ export const CPUProject = () => {
 					flexFlow: "wrap",
 					gap: 10
 				}}>
+					<InstructionRegister />
 					<Memory />
 					<RegisterBank />
-					<InstructionRegister />
-					<ProgramCounter />
-					<InstructionDecoder />
-					<ALU />
+					<Grid style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+						<ProgramCounter />
+						<InstructionDecoder />
+						<ALU />
+					</Grid>
 				</Grid>
 			</Grid>
 		</CPUContextProvider>
