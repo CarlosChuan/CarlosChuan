@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Grid } from "../../components/shared/Grid";
 import { Text } from "../../components/shared/Text";
 import { VSpacer } from "../../components/shared/VSpacer";
-import { ROUTE_NAME, routes } from "../../constants/Routes";
+import { ROUTES_DICT, routes } from "../../constants/Routes";
 
 type ProjectItem = {
 	id: string;
@@ -47,7 +47,7 @@ export const ProjectMenu = () => {
 			description:
 				"Interactive Sudoku board with generator and solver. Play puzzles or step through the solver algorithm.",
 			status: "finished",
-			route: routes.getRoute(ROUTE_NAME.PROJECTS.SUDOKU),
+			route: routes.getRoute(ROUTES_DICT.PROJECTS.SUDOKU),
 		},
 		{
 			id: "computer-sim",
@@ -55,7 +55,7 @@ export const ProjectMenu = () => {
 			description:
 				"An emulator that lets the user interact with gate components to create more complex systems.",
 			status: "in-progress",
-			route: routes.getRoute(ROUTE_NAME.PROJECTS.COMPUTER_SIM),
+			route: routes.getRoute(ROUTES_DICT.PROJECTS.COMPUTER_SIM),
 		},
 		{
 			id: "cpu-sim",
@@ -63,7 +63,7 @@ export const ProjectMenu = () => {
 			description:
 				"A basic CPU design. It's a WIP project that will be growing slowly.",
 			status: "in-progress",
-			route: routes.getRoute(ROUTE_NAME.PROJECTS.CPU_SIM),
+			route: routes.getRoute(ROUTES_DICT.PROJECTS.CPU_SIM.ROOT),
 		},
 	];
 

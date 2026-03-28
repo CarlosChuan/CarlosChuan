@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Grid } from "./components/shared/Grid";
 import palette from "./constants/Colors";
-import { ROUTE_NAME, routes } from "./constants/Routes";
+import { ROUTES_DICT, routes } from "./constants/Routes";
 import { Root } from "./pages/Root";
 
 const AppWrapper = ({ children }: React.PropsWithChildren) => {
@@ -30,12 +30,12 @@ const App = () => {
 				<BrowserRouter>
 					<Routes>
 						<Route
-							path={routes.getValue(ROUTE_NAME.ROOT, true)}
+							path={routes.getValue(ROUTES_DICT.ROOT, true)}
 							element={<Root />}
 						/>
 						<Route
 							path={"*"}
-							element={<Navigate to={routes.getRoute(ROUTE_NAME.ROOT)} />}
+							element={<Navigate to={routes.getRoute(ROUTES_DICT.ROOT)} />}
 						/>
 					</Routes>
 				</BrowserRouter>

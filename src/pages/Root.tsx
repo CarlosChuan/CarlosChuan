@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { ROUTE_NAME, routes } from "../constants/Routes";
+import { ROUTES_DICT, routes } from "../constants/Routes";
 import { AboutMe } from "./about_me";
 import { Header } from "./Header";
 import { Home } from "./home";
@@ -11,20 +11,20 @@ export const Root = () => {
 			<Header />
 			<Routes>
 				<Route
-					path={routes.getValue(ROUTE_NAME.PROJECTS.ROOT, true)}
+					path={routes.getValue(ROUTES_DICT.PROJECTS.ROOT, true)}
 					element={<ProjectRoot />}
 				/>
 				<Route
-					path={routes.getValue(ROUTE_NAME.GENERAL.BIO)}
+					path={routes.getValue(ROUTES_DICT.GENERAL.BIO)}
 					element={<AboutMe />}
 				/>
 				<Route
-					path={routes.getValue(ROUTE_NAME.HOME.ROOT)}
+					path={routes.getValue(ROUTES_DICT.HOME.ROOT)}
 					element={<Home />}
 				/>
 				<Route
 					path={"*"}
-					element={<Navigate to={routes.getRoute(ROUTE_NAME.HOME.ROOT)} />}
+					element={<Navigate to={routes.getRoute(ROUTES_DICT.HOME.ROOT)} />}
 				/>
 			</Routes>
 		</>

@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Grid } from "../components/shared/Grid";
-import { ROUTE_NAME, routes } from "../constants/Routes";
+import { ROUTES_DICT, routes } from "../constants/Routes";
 
 const HeaderBar = styled.header`
 	position: sticky;
@@ -36,7 +36,7 @@ const Nav = styled.nav`
 	gap: 12px;
 `;
 
-const HeaderButton = styled(Grid)<{ $active?: boolean }>`
+const HeaderButton = styled(Grid) <{ $active?: boolean }>`
 	cursor: pointer;
 	padding: 8px 10px;
 	border-radius: 6px;
@@ -53,9 +53,9 @@ const HeaderButton = styled(Grid)<{ $active?: boolean }>`
 
 	&:hover {
 		${(p) =>
-			p.$active
-				? `background: rgba(255,255,255,0.6);`
-				: `background: rgba(255, 255, 255, 0.06);`}
+		p.$active
+			? `background: rgba(255,255,255,0.6);`
+			: `background: rgba(255, 255, 255, 0.06);`}
 	}
 
 	&:focus {
@@ -67,15 +67,15 @@ const HeaderButton = styled(Grid)<{ $active?: boolean }>`
 const Sections = [
 	{
 		label: "Home",
-		url: routes.getRoute(ROUTE_NAME.HOME.ROOT),
+		url: routes.getRoute(ROUTES_DICT.HOME.ROOT),
 	},
 	{
 		label: "Projects",
-		url: routes.getRoute(ROUTE_NAME.PROJECTS.ROOT),
+		url: routes.getRoute(ROUTES_DICT.PROJECTS.ROOT),
 	},
 	{
 		label: "About me",
-		url: routes.getRoute(ROUTE_NAME.GENERAL.BIO),
+		url: routes.getRoute(ROUTES_DICT.GENERAL.BIO),
 	},
 ];
 
@@ -89,12 +89,12 @@ export const Header = () => {
 		<HeaderBar>
 			<Inner>
 				<Brand
-					onClick={() => go(routes.getRoute(ROUTE_NAME.HOME.ROOT))}
+					onClick={() => go(routes.getRoute(ROUTES_DICT.HOME.ROOT))}
 					role="button"
 					tabIndex={0}
 					onKeyDown={(e: React.KeyboardEvent) => {
 						if (e.key === "Enter" || e.key === " ")
-							go(routes.getRoute(ROUTE_NAME.HOME.ROOT));
+							go(routes.getRoute(ROUTES_DICT.HOME.ROOT));
 					}}
 				>
 					Chuan

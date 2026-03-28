@@ -3,7 +3,7 @@ import { Grid } from "../../components/shared/Grid";
 import { HSpacer } from "../../components/shared/HSpacer";
 import { Text } from "../../components/shared/Text";
 import { VSpacer } from "../../components/shared/VSpacer";
-import { ROUTE_NAME, routes } from "../../constants/Routes";
+import { ROUTES_DICT, routes } from "../../constants/Routes";
 
 const ProjectCard = ({
 	title,
@@ -72,7 +72,7 @@ export const Home = () => {
 
 				<Grid style={{ display: "flex", justifyContent: "center" }}>
 					<div
-						onClick={() => navigate(routes.getRoute(ROUTE_NAME.PROJECTS.ROOT))}
+						onClick={() => navigate(routes.getRoute(ROUTES_DICT.PROJECTS.ROOT))}
 						style={{
 							padding: "10px 16px",
 							borderRadius: 6,
@@ -86,7 +86,7 @@ export const Home = () => {
 					</div>
 					<HSpacer medium />
 					<div
-						onClick={() => navigate(routes.getRoute(ROUTE_NAME.GENERAL.BIO))}
+						onClick={() => navigate(routes.getRoute(ROUTES_DICT.GENERAL.BIO))}
 						style={{
 							padding: "10px 16px",
 							borderRadius: 6,
@@ -113,14 +113,14 @@ export const Home = () => {
 						title="Sudoku — playable & solver"
 						description="Interactive sudoku board with generator and solver. Try creating puzzles or watch the solver run."
 						onClick={() =>
-							navigate(routes.getRoute(ROUTE_NAME.PROJECTS.SUDOKU))
+							navigate(routes.getRoute(ROUTES_DICT.PROJECTS.SUDOKU))
 						}
 					/>
 
 					<ProjectCard
 						title="More coming soon"
 						description="I'll add other experiments and small tools here — check back for updates."
-						onClick={() => navigate(routes.getRoute(ROUTE_NAME.PROJECTS.ROOT))}
+						onClick={() => navigate(routes.getRoute(ROUTES_DICT.PROJECTS.ROOT))}
 					/>
 				</Grid>
 			</Grid>

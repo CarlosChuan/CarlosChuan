@@ -1,3 +1,4 @@
+type ProjectSubPages = "cpu_sim_ide"
 type ProjectRouteNames = "project_root" | "sudoku" | "computer_sim" | "cpu_sim";
 type GeneralRouteNames = "bio";
 type HomeRouteNames = "home_root";
@@ -6,6 +7,7 @@ type RouteNames =
 	| "root"
 	| GeneralRouteNames
 	| ProjectRouteNames
+	| ProjectSubPages
 	| HomeRouteNames;
 
 interface RouteNodeInterface {
@@ -112,6 +114,12 @@ class Routing {
 						{
 							id: "cpu_sim",
 							value: "cpu_sim",
+							children: [
+								{
+									id: "cpu_sim_ide",
+									value: "ide",
+								}
+							]
 						},
 					],
 				},
@@ -125,7 +133,7 @@ class Routing {
 }
 
 export const routes = new Routing();
-export const ROUTE_NAME = {
+export const ROUTES_DICT = {
 	ROOT: "root" as RouteNames,
 	HOME: {
 		ROOT: "home_root" as RouteNames,
@@ -134,7 +142,10 @@ export const ROUTE_NAME = {
 		ROOT: "project_root" as RouteNames,
 		SUDOKU: "sudoku" as RouteNames,
 		COMPUTER_SIM: "computer_sim" as RouteNames,
-		CPU_SIM: "cpu_sim" as RouteNames,
+		CPU_SIM: {
+			ROOT: "cpu_sim" as RouteNames,
+			IDE: "cpu_sim_ide" as RouteNames,
+		},
 	},
 	GENERAL: {
 		BIO: "bio" as RouteNames,
