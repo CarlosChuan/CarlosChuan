@@ -5,7 +5,7 @@ import { InstructionRegister } from "../../components/InstructionRegister"
 import { Memory } from "../../components/Memory"
 import { ProgramCounter } from "../../components/ProgramCounter"
 import { RegisterBank } from "../../components/RegisterBank"
-import { SimulationController } from "../../components/SimulationController"
+import { SimulationHeader } from "../../components/SimulationHeader"
 
 export const CPUViewer = () => {
   return (
@@ -16,7 +16,7 @@ export const CPUViewer = () => {
         flexGrow: 1,
       }}
     >
-      <SimulationController />
+      <SimulationHeader />
       <Grid style={{
         display: "flex",
         flexDirection: "column",

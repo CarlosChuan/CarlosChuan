@@ -1,19 +1,23 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Grid } from "../../../../components/shared/Grid";
 import { Text } from "../../../../components/shared/Text";
 import palette from "../../../../constants/Colors";
+import { routes, ROUTES_DICT } from "../../../../constants/Routes";
 import { useCPUContext } from "../context/context";
 import { useRetrieveInstruction } from "../hooks/useRetrieveInstruction";
 import { useRetrieveInstructionRegisters } from "../hooks/useRetrieveInstructionRegisters";
 import { useRetrievePC } from "../hooks/useRetrievePC";
 import { useViewStyle } from "../hooks/useViewStyle";
 
-export const SimulationController = () => {
+export const SimulationHeader = () => {
   const { stepCoordinator } = useCPUContext();
   const { data: instructionRegisters } = useRetrieveInstructionRegisters();
   const { data: PC, setData: setPC } = useRetrievePC();
   const { data: currInstruction, setData: setInstruction } = useRetrieveInstruction();
   const { data: viewStyle, setData: setViewStyle } = useViewStyle();
+
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -29,6 +33,10 @@ export const SimulationController = () => {
     <Grid style={{
       display: "flex", flexDirection: "row", flexBasis: "width", justifyContent: "space-between", alignItems: "center", padding: "10px 20px"
     }}>
+      <Grid onClick={() => navigate(routes.getRoute(ROUTES_DICT.PROJECTS.CPU_SIM.IDE))}>
+        <Text style={{ userSelect: "none", cursor: "pointer" }}>Go to IDE</Text>
+      </Grid>
+
       <Grid
         onClick={() => { setViewStyle(viewStyle === "raw" ? "readable" : "raw") }}
         style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", height: "1em", marginBottom: "4px", cursor: "pointer" }}
