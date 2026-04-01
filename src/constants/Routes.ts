@@ -45,7 +45,7 @@ class Routing {
 				if (value) break;
 			}
 			if (value) {
-				return `/${tree.value}${value}`;
+				return tree.value ? `/${tree.value}${value}` : value;
 			}
 		}
 	};
@@ -93,7 +93,7 @@ class Routing {
 	constructor() {
 		this.root = {
 			id: "root",
-			value: "chuan",
+			value: "",
 			children: [
 				{
 					id: "home_root",
