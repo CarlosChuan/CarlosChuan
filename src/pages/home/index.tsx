@@ -92,7 +92,7 @@ const SecondaryBtn = styled.button`
 `;
 
 const FeaturedSection = styled.section`
-	padding-top: 48px;
+	padding: 48px 0px;
 `;
 
 const ApproachSection = styled.section`
