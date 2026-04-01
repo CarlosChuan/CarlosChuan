@@ -1,13 +1,17 @@
 {
   "name": "carloschuan",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "cp .git-hooks/commit-msg .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg",
+    "release:major": "npm version major --message \"[global] chore: release v%s\"",
+    "release:minor": "npm version minor --message \"[global] chore: release v%s\"",
+    "release:patch": "npm version patch --message \"[global] chore: release v%s\""
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",

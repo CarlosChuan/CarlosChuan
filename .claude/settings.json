@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /home/oscarmonkey/Documents/Projects/carloschuan log --oneline -10)",
+      "Bash(git -C /home/oscarmonkey/Documents/Projects/carloschuan log --oneline -20)",
+      "Bash(cp /home/oscarmonkey/Documents/Projects/carloschuan/.git-hooks/commit-msg /home/oscarmonkey/Documents/Projects/carloschuan/.git/hooks/commit-msg)",
+      "Bash(chmod +x /home/oscarmonkey/Documents/Projects/carloschuan/.git/hooks/commit-msg /home/oscarmonkey/Documents/Projects/carloschuan/.git-hooks/commit-msg /home/oscarmonkey/Documents/Projects/carloschuan/.git-hooks/validate-commit-msg.js)",
+      "Bash(node .git-hooks/validate-commit-msg.js /dev/stdin)"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "scopes": ["global", "CPU", "Sudoku"],
+  "types": ["feat", "fix", "style", "refactor", "chore", "docs", "test", "wip"],
+  "rules": {
+    "scopeCaseSensitive": true,
+    "minDescriptionLength": 3
+  }
+}
