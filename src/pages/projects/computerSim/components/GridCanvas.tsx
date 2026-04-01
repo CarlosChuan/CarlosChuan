@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import palette from "../../../../constants/Colors";
-import { Position } from "../domains/Position";
-import { ComputerSimElement } from "../domains/ComputerSimElement";
-import { ValueSource } from "../domains/simComponents/ValueSource";
 import "../assets/styles/iconColors.css";
-import wireNodeTrue from "../assets/svg/components/wire_node/wire_node_true.svg";
 import wireNodeFalse from "../assets/svg/components/wire_node/wire_node_false.svg";
+import wireNodeTrue from "../assets/svg/components/wire_node/wire_node_true.svg";
+import { ComputerSimElement } from "../domains/ComputerSimElement";
+import { Position } from "../domains/Position";
+import { ValueSource } from "../domains/simComponents/ValueSource";
 
 const SVG_SIZE = 50;
 
@@ -18,12 +17,12 @@ export const GridCanvas = () => {
 	const cameraPosition = useRef<Position>({ x: 0, y: 0 });
 	const imageCache = useRef<Map<string, HTMLImageElement>>(new Map());
 
-	const [canvaSize, setCameraArea] = useState({
+	const [canvaSize] = useState({
 		width: window.innerWidth,
 		height: window.innerHeight - 64, // windowHeight - headerHeight
 	});
 	const [isMouseDown, setIsMouseDown] = useState(false);
-	const [simElements, setSimElements] = useState<ComputerSimElement[]>([
+	const [simElements] = useState<ComputerSimElement[]>([
 		new ValueSource({
 			name: "test",
 			inputs: [],
@@ -71,7 +70,7 @@ export const GridCanvas = () => {
 		setIsMouseDown(false);
 	}, []);
 
-	const clickFunction = useCallback((event: PointerEvent) => {
+	const clickFunction = useCallback((event: MouseEvent) => {
 		const relativeClickPosition = {
 			x:
 				event.offsetX +
@@ -178,7 +177,7 @@ export const GridCanvas = () => {
 		simElements.forEach((element) => {
 			const { svgSrc } = element.getCanvaElement();
 
-			const { img, new: newImage } = getImage(svgSrc);
+			const { img } = getImage(svgSrc);
 
 			const position = getCoordinates(element.position);
 			ctx.drawImage(img!, position.x, position.y, SVG_SIZE, SVG_SIZE);
@@ -188,7 +187,7 @@ export const GridCanvas = () => {
 
 			if (element.outputs.length > 0) {
 				const dividedHeight = SVG_SIZE / element.outputs.length;
-				element.outputs.forEach((output, idx, outputs) => {
+				element.outputs.forEach((output, idx) => {
 					const outputPosition = getCoordinates({
 						x: element.position.x + SVG_SIZE,
 						y: element.position.y + dividedHeight * idx,

@@ -3,15 +3,12 @@ import { Text } from "../../../../components/shared/Text";
 import palette from "../../../../constants/Colors";
 import { bitToHex } from "../../../../helpers/strings";
 import { ADD, Instruction, READ, WRITE } from "../domains/instruction/Instruction";
-import { Signed8Int } from "../domains/Signed8Int";
 import { useRetrieveInstruction } from "../hooks/useRetrieveInstruction";
 import { useRetrieveMemoryData } from "../hooks/useRetrieveMemoryData";
 import { useRetrieveRegisterBank } from "../hooks/useRetrieveRegisterBank";
 import { useStepHandler } from "../hooks/useStepHandler";
-import { useViewStyle } from "../hooks/useViewStyle";
 
 export const InstructionDecoder = () => {
-  const { data: viewStyle } = useViewStyle();
   const { data: instruction } = useRetrieveInstruction();
   const { data: memoryData, setData: setMemoryData } = useRetrieveMemoryData();
   const { data: registerBank, setData: setRegisterBank } = useRetrieveRegisterBank();
@@ -72,7 +69,7 @@ export const InstructionDecoder = () => {
             return;
           }
           const newRegisterBank = [...registerBank];
-          newRegisterBank[parseInt(params.to, 2)] = new Signed8Int(memoryCell.rawInt);
+          newRegisterBank[parseInt(params.to, 2)] = memoryCell;
           setRegisterBank(newRegisterBank);
           resolve();
           return;
@@ -86,7 +83,7 @@ export const InstructionDecoder = () => {
             return;
           };
           const newMemoryData = [...memoryData];
-          newMemoryData[parseInt(params.to, 2)] = new Signed8Int(registerCell.rawInt);
+          newMemoryData[parseInt(params.to, 2)] = registerCell;
           setMemoryData(newMemoryData);
           resolve();
           return;
