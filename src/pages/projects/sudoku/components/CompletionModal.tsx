@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 const fadeIn = keyframes`

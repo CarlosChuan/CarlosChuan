@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type ThemeCtx = { isDark: boolean; toggle: () => void; mounted: boolean };
 
-const ThemeContext = createContext<ThemeCtx>({ isDark: true, toggle: () => {}, mounted: false });
+const ThemeContext = createContext<ThemeCtx>({ isDark: true, toggle: () => { }, mounted: false });
 
 export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
 	const [isDark, setIsDark] = useState<boolean>(() => {
