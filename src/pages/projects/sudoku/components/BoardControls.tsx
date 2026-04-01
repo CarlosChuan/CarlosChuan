@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid } from "../../../../components/shared/Grid";
-import palette from "../../../../constants/Colors";
+import styled from "styled-components";
 
 type Props = {
 	onSolveClick: () => void;
@@ -14,62 +14,91 @@ type Props = {
 	disabled?: boolean;
 };
 
-const rootStyle: React.CSSProperties = {
-	display: "flex",
-	flexDirection: "column",
-	gap: 16,
-	width: "100%",
-};
+const Section = styled.div`
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 10px;
+	padding: 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+`;
 
-const sectionStyle: React.CSSProperties = {
-	backgroundColor: "rgba(255, 255, 255, 0.08)",
-	padding: 14,
-	borderRadius: 12,
-	display: "flex",
-	flexDirection: "column",
-	gap: 10,
-	boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
-};
+const SectionLabel = styled.p`
+	margin: 0 0 4px;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.68rem;
+	letter-spacing: 1.8px;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+`;
 
-const baseButtonStyle: React.CSSProperties = {
-	padding: "12px 16px",
-	borderRadius: 10,
-	border: "none",
-	cursor: "pointer",
-	fontWeight: 600,
-	fontSize: "0.95rem",
-	transition: "all 0.15s ease",
-	boxShadow: "0 3px 8px rgba(0, 0, 0, 0.2)",
-};
+const Btn = styled.button<{
+	$variant?: "primary" | "danger" | "ghost" | "muted";
+	$disabled?: boolean;
+}>`
+	padding: 10px 14px;
+	border-radius: 8px;
+	border: none;
+	cursor: ${(p) => (p.$disabled ? "not-allowed" : "pointer")};
+	font-weight: 600;
+	font-size: 0.85rem;
+	font-family: inherit;
+	transition: opacity 130ms ease, transform 130ms ease;
+	opacity: ${(p) => (p.$disabled ? 0.45 : 1)};
+	width: 100%;
+	text-align: left;
 
-const rowStyle: React.CSSProperties = {
-	display: "flex",
-	gap: 10,
-	alignItems: "center",
-};
+	${(p) => {
+		switch (p.$variant) {
+			case "primary":
+				return `background: var(--color-primary); color: #fff;`;
+			case "danger":
+				return `background: rgba(220,38,38,0.15); color: #ef4444; border: 1px solid rgba(220,38,38,0.25);`;
+			case "muted":
+				return `background: var(--color-surface-2); color: var(--color-text-muted); border: 1px solid var(--color-border);`;
+			default:
+				return `background: var(--color-primary-dim); color: var(--color-primary); border: 1px solid var(--color-border);`;
+		}
+	}}
 
-const labelStyle: React.CSSProperties = {
-	color: `${palette.light.white}DD`,
-	fontWeight: 600,
-	fontSize: "0.9rem",
-	minWidth: 65,
-};
+	&:hover:not(:disabled) {
+		opacity: 0.82;
+		transform: translateY(-1px);
+	}
+	&:active:not(:disabled) {
+		transform: translateY(0);
+	}
+`;
 
-const inputStyle: React.CSSProperties = {
-	padding: "8px 10px",
-	borderRadius: 8,
-	border: `1px solid rgba(255, 255, 255, 0.12)`,
-	background: "rgba(255, 255, 255, 0.05)",
-	color: palette.light.white,
-	width: 90,
-	fontSize: "0.9rem",
-};
+const Row = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 10px;
+`;
 
-const stackStyle: React.CSSProperties = {
-	display: "flex",
-	flexDirection: "column",
-	gap: 8,
-};
+const Label = styled.span`
+	color: var(--color-text-muted);
+	font-size: 0.82rem;
+	min-width: 60px;
+	font-family: "Courier New", Courier, monospace;
+`;
+
+const NumberInput = styled.input`
+	padding: 7px 10px;
+	border-radius: 7px;
+	border: 1px solid var(--color-border);
+	background: var(--color-surface-2);
+	color: var(--color-text);
+	width: 80px;
+	font-size: 0.85rem;
+	font-family: inherit;
+
+	&:focus {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 1px;
+	}
+`;
 
 export const BoardControls: React.FC<Props> = ({
 	onSolveClick,
@@ -83,94 +112,48 @@ export const BoardControls: React.FC<Props> = ({
 	disabled,
 }) => {
 	return (
-		<Grid style={rootStyle}>
-			<Grid style={sectionStyle}>
-				<button
+		<Grid style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
+			<Section>
+				<SectionLabel>solver</SectionLabel>
+				<Btn
+					$variant="primary"
+					$disabled={disabled}
 					onClick={onSolveClick}
 					disabled={disabled}
-					style={{
-						...baseButtonStyle,
-						background: `linear-gradient(135deg, ${palette.light.primary20}, ${palette.light.primary00})`,
-						color: palette.light.white,
-						opacity: disabled ? 0.5 : 1,
-						cursor: disabled ? "not-allowed" : "pointer",
-					}}
 				>
-					Solve
-				</button>
-
-				<Grid style={rowStyle}>
-					<Grid style={labelStyle}>Step ms</Grid>
-					<input
-						style={inputStyle}
+					▶ Solve
+				</Btn>
+				<Row>
+					<Label>step ms</Label>
+					<NumberInput
 						type="number"
 						value={solveStepTime}
 						onChange={(e) => setSolveStepTime(Number(e.target.value))}
 					/>
-				</Grid>
-			</Grid>
+				</Row>
+			</Section>
 
-			<Grid style={sectionStyle}>
-				<button
-					onClick={onGenerateRandom}
-					style={{
-						...baseButtonStyle,
-						background: `${palette.light.secondary00}CC`,
-						color: palette.light.primary00,
-					}}
-				>
-					Generate random
-				</button>
+			<Section>
+				<SectionLabel>generate</SectionLabel>
+				<Btn $variant="ghost" onClick={onGenerateRandom}>
+					Random
+				</Btn>
+				<Btn $variant="muted" onClick={onGenerateEasy}>
+					Easy
+				</Btn>
+				<Btn $variant="muted" onClick={onGenerateMedium}>
+					Medium
+				</Btn>
+				<Btn $variant="danger" onClick={onGenerateExtreme}>
+					Difficult
+				</Btn>
+			</Section>
 
-				<Grid style={stackStyle}>
-					<button
-						onClick={onGenerateEasy}
-						style={{
-							...baseButtonStyle,
-							background: "rgba(255, 255, 255, 0.1)",
-							color: palette.light.white,
-							border: `1px solid rgba(255, 255, 255, 0.15)`,
-						}}
-					>
-						Generate easy
-					</button>
-					<button
-						onClick={onGenerateMedium}
-						style={{
-							...baseButtonStyle,
-							background: "rgba(255, 255, 255, 0.1)",
-							color: palette.light.white,
-							border: `1px solid rgba(255, 255, 255, 0.15)`,
-						}}
-					>
-						Generate medium
-					</button>
-					<button
-						onClick={onGenerateExtreme}
-						style={{
-							...baseButtonStyle,
-							background: `${palette.light.error}DD`,
-							color: palette.light.white,
-						}}
-					>
-						Generate difficult
-					</button>
-				</Grid>
-			</Grid>
-
-			<Grid style={sectionStyle}>
-				<button
-					onClick={onClear}
-					style={{
-						...baseButtonStyle,
-						background: "rgba(255, 255, 255, 0.08)",
-						color: palette.light.white,
-						border: `1px solid rgba(255, 255, 255, 0.12)`,
-					}}
-				>
-					Clear
-				</button>
-			</Grid>
+			<Section>
+				<Btn $variant="muted" onClick={onClear}>
+					Clear board
+				</Btn>
+			</Section>
 		</Grid>
 	);
 };

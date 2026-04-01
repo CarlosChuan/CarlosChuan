@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ROUTES_DICT, routes } from "../../constants/Routes";
-import { ComputerSimProject } from "./computerSim";
 import { CPUProject } from "./CPU";
 import { ProjectMenu } from "./ProjectMenu";
 import { SudokuProject } from "./sudoku";
@@ -14,10 +13,10 @@ export const ProjectRoot = () => {
 					path={routes.getValue(ROUTES_DICT.PROJECTS.SUDOKU)}
 					element={<SudokuProject />}
 				/>
-				<Route
+				{/* <Route
 					path={routes.getValue(ROUTES_DICT.PROJECTS.COMPUTER_SIM)}
 					element={<ComputerSimProject />}
-				/>
+				/> */}
 				<Route
 					path={routes.getValue(ROUTES_DICT.PROJECTS.CPU_SIM.ROOT, true)}
 					element={<CPUProject />}

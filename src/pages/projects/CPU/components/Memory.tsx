@@ -1,53 +1,69 @@
-import { useEffect, useState } from "react"
-import { Grid } from "../../../../components/shared/Grid"
-import { Text } from "../../../../components/shared/Text"
-import palette from "../../../../constants/Colors"
-import { MemoryCell } from "../domains/MemoryCell"
-import { useRetrieveMemoryData } from "../hooks/useRetrieveMemoryData"
-import { useViewStyle } from "../hooks/useViewStyle"
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { MemoryCell } from "../domains/MemoryCell";
+import { useRetrieveMemoryData } from "../hooks/useRetrieveMemoryData";
+import { useViewStyle } from "../hooks/useViewStyle";
+
+const Widget = styled.div`
+	display: flex;
+	flex-direction: column;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 8px;
+	overflow: hidden;
+	width: fit-content;
+	min-width: 200px;
+	max-height: 70vh;
+`;
+
+const WidgetHeader = styled.div`
+	background: var(--color-surface-2);
+	border-bottom: 1px solid var(--color-border);
+	padding: 5px 12px;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.68rem;
+	letter-spacing: 1.8px;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+`;
+
+const WidgetBody = styled.div`
+	overflow-y: auto;
+	padding: 4px 0;
+`;
+
+const Row = styled.div<{ $last?: boolean }>`
+	padding: 3px 12px;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.8rem;
+	color: var(--color-text);
+	text-transform: uppercase;
+	${(p) =>
+		!p.$last && `border-bottom: 1px solid var(--color-border-subtle);`}
+`;
 
 export const Memory = () => {
-  const [memory, setMemory] = useState<MemoryCell[]>([])
+	const [memory, setMemory] = useState<MemoryCell[]>([]);
+	const { data: viewStyle } = useViewStyle();
+	const { data: memoryStoredData, isLoading } = useRetrieveMemoryData();
 
-  const { data: viewStyle } = useViewStyle();
-  const { data: memoryStoredData, isLoading } = useRetrieveMemoryData();
+	useEffect(() => {
+		setMemory(memoryStoredData);
+	}, [memoryStoredData]);
 
-  useEffect(() => {
-    setMemory(memoryStoredData);
-  }, [memoryStoredData])
-
-
-  return (
-    <Grid style={{ display: "flex", flexDirection: "column", backgroundColor: palette.light.white, width: "fit-content", minWidth: "200px", maxHeight: "70vh" }}>
-      <Text style={{ color: palette.light.black, textAlign: "center" }}>
-        Memory
-      </Text>
-      <Grid style={{ overflowY: "scroll" }}>
-        {isLoading && "LOADING..."}
-        <Grid style={{ display: "flex", flexDirection: "column", padding: "6px" }}>
-          {
-            memory.map((cell, idx, memory) => {
-              const isLast = idx === memory.length - 1;
-              return (
-                <Grid key={`memory-${viewStyle}-${idx}`} style={{
-                  color: palette.light.black,
-                  ...(isLast ? {} :
-                    {
-                      marginBottom: '2px',
-                      borderBottom: '1px solid #0000005d',
-                    }
-                  ),
-                  textTransform: "uppercase",
-                  fontFamily: "monospace"
-                }}>
-                  {cell.toString(viewStyle, memory.length)}
-                </Grid>
-              )
-            }
-            )
-          }
-        </Grid>
-      </Grid>
-    </Grid >
-  )
-}
+	return (
+		<Widget>
+			<WidgetHeader>Memory</WidgetHeader>
+			<WidgetBody>
+				{isLoading && (
+					<Row $last>loading…</Row>
+				)}
+				{memory.map((cell, idx) => (
+					<Row key={`memory-${viewStyle}-${idx}`} $last={idx === memory.length - 1}>
+						{cell.toString(viewStyle, memory.length)}
+					</Row>
+				))}
+			</WidgetBody>
+		</Widget>
+	);
+};

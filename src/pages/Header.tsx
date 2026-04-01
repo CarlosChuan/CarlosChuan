@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Grid } from "../components/shared/Grid";
+import { useTheme } from "../context/ThemeContext";
 import { ROUTES_DICT, routes } from "../constants/Routes";
 
 const HeaderBar = styled.header`
@@ -8,16 +9,18 @@ const HeaderBar = styled.header`
 	top: 0;
 	z-index: 50;
 	width: 100%;
-	backdrop-filter: blur(6px);
-	-webkit-backdrop-filter: blur(6px);
-	background: rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	background: var(--header-bg);
+	border-bottom: 1px solid var(--color-border);
+	transition: background 200ms ease, border-color 200ms ease;
 `;
 
 const Inner = styled(Grid)`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	height: 64px;
+	height: 60px;
 	width: 70%;
 	max-width: 920px;
 	margin: 0 auto;
@@ -25,63 +28,146 @@ const Inner = styled(Grid)`
 
 const Brand = styled.div`
 	font-weight: 700;
-	letter-spacing: 0.2px;
+	font-size: 1rem;
 	cursor: pointer;
 	user-select: none;
+	color: var(--color-primary);
+	font-family: "Courier New", Courier, monospace;
+	letter-spacing: 0.3px;
+	transition: opacity 120ms ease;
+
+	&::before {
+		content: "<";
+		opacity: 0.5;
+		margin-right: 1px;
+	}
+	&::after {
+		content: " />";
+		opacity: 0.5;
+		margin-left: 1px;
+	}
+
+	&:hover {
+		opacity: 0.8;
+	}
 `;
 
 const Nav = styled.nav`
 	display: flex;
 	align-items: center;
-	gap: 12px;
+	gap: 4px;
 `;
 
-const HeaderButton = styled(Grid) <{ $active?: boolean }>`
+const NavButton = styled(Grid)<{ $active?: boolean }>`
 	cursor: pointer;
-	padding: 8px 10px;
+	height: 28px;
+	padding: 0 12px;
 	border-radius: 6px;
-	transition:
-		background 120ms ease,
-		transform 120ms ease;
+	font-size: 0.875rem;
+	transition: background 120ms ease, color 120ms ease, transform 120ms ease;
 	display: inline-flex;
 	align-items: center;
+	font-weight: ${(p) => (p.$active ? 600 : 400)};
 
 	${(p) =>
 		p.$active
-			? `background: rgba(255,255,255,0.95); color: #000; font-weight: 700; transform: translateY(-1px);`
-			: `background: transparent; color: inherit;`}
+			? `
+		background: var(--color-primary-dim);
+		color: var(--color-primary);
+		transform: translateY(-1px);
+	`
+			: `
+		background: transparent;
+		color: var(--color-text-muted);
+	`}
 
 	&:hover {
-		${(p) =>
-		p.$active
-			? `background: rgba(255,255,255,0.6);`
-			: `background: rgba(255, 255, 255, 0.06);`}
+		background: var(--color-primary-dim);
+		color: var(--color-primary);
 	}
 
-	&:focus {
-		outline: 2px solid rgba(255, 255, 255, 0.12);
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+`;
+
+const GithubLink = styled.a`
+	cursor: pointer;
+	height: 28px;
+	width: 28px;
+	padding: 0;
+	border-radius: 6px;
+	border: 1px solid var(--color-border);
+	background: transparent;
+	line-height: 1;
+	text-decoration: none;
+	transition: background 120ms ease, border-color 120ms ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 8px;
+
+	img {
+		display: block;
+		width: 16px;
+		height: 16px;
+		opacity: 0.5;
+		transition: opacity 120ms ease;
+		filter: var(--github-icon-filter);
+	}
+
+	&:hover {
+		background: var(--color-surface-2);
+		border-color: var(--color-primary);
+		text-decoration: none;
+		img { opacity: 1; }
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+`;
+
+const ThemeToggle = styled.button`
+	cursor: pointer;
+	height: 28px;
+	padding: 0 10px;
+	border-radius: 6px;
+	border: 1px solid var(--color-border);
+	background: transparent;
+	color: var(--color-text-muted);
+	font-size: 0.875rem;
+	line-height: 1;
+	transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 8px;
+
+	&:hover {
+		background: var(--color-surface-2);
+		border-color: var(--color-primary);
+		color: var(--color-primary);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
 		outline-offset: 2px;
 	}
 `;
 
 const Sections = [
-	{
-		label: "Home",
-		url: routes.getRoute(ROUTES_DICT.HOME.ROOT),
-	},
-	{
-		label: "Projects",
-		url: routes.getRoute(ROUTES_DICT.PROJECTS.ROOT),
-	},
-	{
-		label: "About me",
-		url: routes.getRoute(ROUTES_DICT.GENERAL.BIO),
-	},
+	{ label: "Home", url: routes.getRoute(ROUTES_DICT.HOME.ROOT) },
+	{ label: "Projects", url: routes.getRoute(ROUTES_DICT.PROJECTS.ROOT) },
+	{ label: "About me", url: routes.getRoute(ROUTES_DICT.GENERAL.BIO) },
 ];
 
 export const Header = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
+	const { isDark, toggle } = useTheme();
 
 	const go = (url: string) => navigate(url);
 
@@ -106,7 +192,7 @@ export const Header = () => {
 							location.pathname === section.url ||
 							location.pathname.startsWith(section.url + "/");
 						return (
-							<HeaderButton
+							<NavButton
 								key={section.label}
 								$active={active}
 								role="link"
@@ -118,9 +204,27 @@ export const Header = () => {
 								}}
 							>
 								{section.label}
-							</HeaderButton>
+							</NavButton>
 						);
 					})}
+
+					<GithubLink
+						href="https://github.com/CarlosChuan/CarlosChuan"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="GitHub profile"
+						title="GitHub"
+					>
+						<img src="/image/github.svg" alt="GitHub" />
+					</GithubLink>
+
+					<ThemeToggle
+						onClick={toggle}
+						aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+						title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+					>
+						{isDark ? "☀" : "☾"}
+					</ThemeToggle>
 				</Nav>
 			</Inner>
 		</HeaderBar>

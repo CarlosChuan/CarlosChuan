@@ -1,45 +1,62 @@
-import { Grid } from "../../../../components/shared/Grid";
-import { Text } from "../../../../components/shared/Text";
-import palette from "../../../../constants/Colors";
+import styled from "styled-components";
 import { useRetrieveRegisterBank } from "../hooks/useRetrieveRegisterBank";
 import { useViewStyle } from "../hooks/useViewStyle";
 
+const Widget = styled.div`
+	display: flex;
+	flex-direction: column;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 8px;
+	overflow: hidden;
+	width: fit-content;
+	min-width: 200px;
+	max-height: 70vh;
+`;
+
+const WidgetHeader = styled.div`
+	background: var(--color-surface-2);
+	border-bottom: 1px solid var(--color-border);
+	padding: 5px 12px;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.68rem;
+	letter-spacing: 1.8px;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+`;
+
+const WidgetBody = styled.div`
+	overflow-y: auto;
+	padding: 4px 0;
+`;
+
+const Row = styled.div<{ $last?: boolean }>`
+	padding: 3px 12px;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.8rem;
+	color: var(--color-text);
+	text-transform: uppercase;
+	${(p) => !p.$last && `border-bottom: 1px solid var(--color-border-subtle);`}
+`;
+
 export const RegisterBank = () => {
-  const { data: viewStyle } = useViewStyle();
-  const { data: registers, isLoading } = useRetrieveRegisterBank();
+	const { data: viewStyle } = useViewStyle();
+	const { data: registers, isLoading } = useRetrieveRegisterBank();
 
-
-  return (
-    <Grid style={{ display: "flex", flexDirection: "column", backgroundColor: palette.light.white, width: "fit-content", minWidth: "200px", maxHeight: "70vh" }}>
-      <Text style={{ color: palette.light.black, textAlign: "center" }}>
-        Register Bank
-      </Text>
-      <Grid style={{ overflowY: "scroll" }}>
-        {isLoading && "LOADING..."}
-        <Grid style={{ display: "flex", flexDirection: "column", padding: "6px" }}>
-          {
-            registers.map((register, idx, registers) => {
-              const isLast = idx === registers.length - 1;
-              return (
-                <Grid key={`rb-${viewStyle}-${idx}`} style={{
-                  color: palette.light.black,
-                  ...(isLast ? {} :
-                    {
-                      marginBottom: '2px',
-                      borderBottom: '1px solid #0000005d',
-                    }
-                  ),
-                  textTransform: "uppercase",
-                  fontFamily: "monospace"
-                }}>
-                  {register.toString(viewStyle, registers.length)}
-                </Grid>
-              )
-            }
-            )
-          }
-        </Grid>
-      </Grid>
-    </Grid >
-  )
-}
+	return (
+		<Widget>
+			<WidgetHeader>Register Bank</WidgetHeader>
+			<WidgetBody>
+				{isLoading && <Row $last>loading…</Row>}
+				{registers.map((register, idx) => (
+					<Row
+						key={`rb-${viewStyle}-${idx}`}
+						$last={idx === registers.length - 1}
+					>
+						{register.toString(viewStyle, registers.length)}
+					</Row>
+				))}
+			</WidgetBody>
+		</Widget>
+	);
+};

@@ -1,142 +1,279 @@
-import { Grid } from "../../components/shared/Grid";
-import { HSpacer } from "../../components/shared/HSpacer";
-import { Text } from "../../components/shared/Text";
+import styled from "styled-components";
 import { VSpacer } from "../../components/shared/VSpacer";
 
+const PageWrap = styled.div`
+	max-width: 920px;
+	padding: 40px 28px 96px;
+	margin: 0 auto;
+`;
+
+const Banner = styled.div`
+	height: 160px;
+	border-radius: 10px;
+	background: linear-gradient(
+		135deg,
+		var(--color-primary-dark) 0%,
+		var(--color-primary) 100%
+	);
+	display: flex;
+	align-items: flex-end;
+	padding: 22px;
+`;
+
+const BannerName = styled.h1`
+	margin: 0;
+	color: #fff;
+	font-size: 1.9rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+`;
+
+const BannerRole = styled.p`
+	margin: 4px 0 0;
+	color: rgba(255, 255, 255, 0.8);
+	font-weight: 400;
+	font-size: 0.9rem;
+`;
+
+const Location = styled.p`
+	margin: 0;
+	font-size: 0.8rem;
+	color: var(--color-text-muted);
+	font-family: "Courier New", Courier, monospace;
+	letter-spacing: 0.5px;
+`;
+
+const SectionLabel = styled.h2`
+	margin: 0 0 14px;
+	font-size: 0.78rem;
+	font-weight: 600;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	font-family: "Courier New", Courier, monospace;
+	color: var(--color-primary);
+`;
+
+const BodyText = styled.p`
+	margin: 0;
+	color: var(--color-text-muted);
+	line-height: 1.72;
+	font-size: 0.95rem;
+`;
+
+const Divider = styled.hr`
+	border: none;
+	border-top: 1px solid var(--color-border);
+	margin: 0;
+`;
+
+const ExpCard = styled.div`
+	border-left: 2px solid var(--color-primary);
+	padding: 14px 18px;
+	background: var(--color-surface);
+	border-radius: 0 8px 8px 0;
+	margin-bottom: 10px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+`;
+
+const ExpTitle = styled.h3`
+	margin: 0 0 3px;
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: var(--color-text);
+`;
+
+const ExpMeta = styled.p`
+	margin: 0 0 6px;
+	font-size: 0.78rem;
+	color: var(--color-primary);
+	font-family: "Courier New", Courier, monospace;
+	letter-spacing: 0.3px;
+`;
+
+const ExpDesc = styled.p`
+	margin: 0;
+	font-size: 0.875rem;
+	color: var(--color-text-muted);
+	line-height: 1.55;
+`;
+
+const EduCard = styled.div`
+	padding: 12px 16px;
+	border: 1px solid var(--color-border);
+	border-radius: 8px;
+	background: var(--color-surface);
+	margin-bottom: 8px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+`;
+
+const EduText = styled.p`
+	margin: 0;
+	font-size: 0.875rem;
+	color: var(--color-text-muted);
+	line-height: 1.5;
+`;
+
+const EduStrong = styled.strong`
+	color: var(--color-text);
+`;
+
+const ContactRow = styled.div`
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+`;
+
+const ContactLink = styled.a`
+	display: inline-flex;
+	align-items: center;
+	padding: 8px 16px;
+	border-radius: 7px;
+	border: 1px solid var(--color-border);
+	background: var(--color-surface);
+	color: var(--color-primary);
+	font-size: 0.875rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: border-color 120ms ease, background 120ms ease;
+
+	&:hover {
+		border-color: var(--color-primary);
+		background: var(--color-primary-dim);
+		text-decoration: none;
+	}
+`;
+
+
 export const AboutMe = () => {
-	const containerStyle: React.CSSProperties = {
-		maxWidth: 920,
-		padding: "28px",
-		margin: "0 auto",
-		height: "100%",
-	};
-
-	const bannerStyle: React.CSSProperties = {
-		height: 160,
-		borderRadius: 8,
-		backgroundColor: "#0b5cff",
-		backgroundImage: "url('/assets/profile-bg.jpg')",
-		backgroundSize: "cover",
-		backgroundPosition: "center",
-		display: "flex",
-		alignItems: "flex-end",
-		padding: 16,
-		color: "white",
-	};
-
 	return (
-		<Grid style={containerStyle}>
-			<Grid style={bannerStyle}>
-				<Grid>
-					<Text type="h1" style={{ margin: 0, color: "white" }}>
-						Carlos Chuan
-					</Text>
-					<Text type="h4" style={{ margin: 0, color: "rgba(255,255,255,0.9)" }}>
-						Software Engineer @ Routal
-					</Text>
-				</Grid>
-			</Grid>
+		<PageWrap>
+			<Banner>
+				<div>
+					<BannerName>Carlos Chuan</BannerName>
+					<BannerRole>Software Engineer @ Routal</BannerRole>
+				</div>
+			</Banner>
 
 			<VSpacer medium />
+			<Location>// Barcelona, Catalonia, Spain</Location>
 
-			<Grid style={{ display: "flex", alignItems: "center", gap: 12 }}>
-				<Text type="p" style={{ margin: 0 }}>
-					Vilassar de Mar, Catalonia, Spain
-				</Text>
-			</Grid>
+			<VSpacer large />
+			<Divider />
+			<VSpacer large />
 
-			<VSpacer medium />
+			<SectionLabel>about</SectionLabel>
+			<BodyText>
+				Full-stack engineer at Routal with a background in Computer Science
+				(Universitat de Barcelona, graduating 2025). I work across the stack —
+				React frontends to backend services — as part of a small, fast-moving
+				product team. I'm drawn to problems at the intersection of UX and
+				performance, and I enjoy building things that are simple to use but
+				non-trivial to build.
+			</BodyText>
 
-			<Text type="h3">About</Text>
-			<Text>
-				As a Full-stack Software Engineer at Routal, I apply my full-stack
-				development skills to create innovative and user-friendly web
-				applications. I work with a small and agile team contributing to
-				brainstorming, design, development, testing, and deployment of projects.
-				I enjoy learning new technologies and frameworks and I always seek to
-				improve code quality and performance.
-			</Text>
+			<VSpacer large />
+			<Divider />
+			<VSpacer large />
 
-			<VSpacer medium />
+			<SectionLabel>experience</SectionLabel>
+			<ExpCard>
+				<ExpTitle>Routal</ExpTitle>
+				<ExpMeta>
+					Full-stack Software Engineer · Dec 2023 – Present · Barcelona, Hybrid
+				</ExpMeta>
+				<ExpDesc>
+					Contributing to the full product lifecycle — from feature scoping and
+					design to development, testing, and deployment — within a lean,
+					cross-functional team. Working primarily with React and TypeScript on
+					the frontend, alongside backend services.
+				</ExpDesc>
+			</ExpCard>
+			<ExpCard>
+				<ExpTitle>Cercle d'Aventura</ExpTitle>
+				<ExpMeta>Sailing Instructor · Jun 2017 – Sep 2023 · Premià de Mar</ExpMeta>
+				<ExpDesc>
+					Taught sailing to groups across all skill levels over six seasons.
+					Managed safety, logistics, and communication for groups of up to 20
+					participants while balancing a full engineering degree.
+				</ExpDesc>
+			</ExpCard>
+			<ExpCard>
+				<ExpTitle>The Hemp Ground</ExpTitle>
+				<ExpMeta>IT Specialist · May 2022 – Mar 2023 · Mataró</ExpMeta>
+				<ExpDesc>
+					Sole IT responsibility for a small retail business: website
+					maintenance, hardware support, and day-to-day troubleshooting.
+				</ExpDesc>
+			</ExpCard>
 
-			<Text type="h3">Experience</Text>
-			<Grid>
-				<Text type="h4">Routal</Text>
-				<Text type="p">
-					Full-stack Software Engineer — Dec 2023 - Present · Barcelona, Hybrid
-				</Text>
+			<VSpacer large />
+			<Divider />
+			<VSpacer large />
 
-				<VSpacer small />
+			<SectionLabel>education</SectionLabel>
+			<EduCard>
+				<EduText>
+					<EduStrong>Universitat de Barcelona</EduStrong> — B.Eng. in Computer
+					Science · Sep 2020 – Jun 2025
+				</EduText>
+			</EduCard>
+			<EduCard>
+				<EduText>
+					<EduStrong>Australian College of Business Intelligence</EduStrong> —
+					Advanced Diploma in Information Technology
+				</EduText>
+			</EduCard>
+			<EduCard>
+				<EduText>
+					<EduStrong>Escola Catalana Esport</EduStrong> — Level 1 Sailing
+					Instructor Certification · Jan – Mar 2021
+				</EduText>
+			</EduCard>
 
-				<Text type="h4">CERCLE D'AVENTURA SL</Text>
-				<Text type="p">
-					Sailing Instructor — Jun 2017 - Sep 2023 · Premià de Mar
-				</Text>
-				<Text type="p">
-					Managed groups and taught sailing; developed leadership and teaching
-					skills alongside studies.
-				</Text>
+			<VSpacer large />
+			<Divider />
+			<VSpacer large />
 
-				<VSpacer small />
+			<SectionLabel>open to</SectionLabel>
+			<BodyText>
+				Full-time software engineering roles and freelance web development
+				projects. Particularly interested in product-focused teams working on
+				technically challenging problems — whether that's frontend, full-stack,
+				or anything close to the metal.
+			</BodyText>
 
-				<Text type="h4">The Hemp Ground</Text>
-				<Text type="p">IT Specialist — May 2022 - Mar 2023 · Mataró</Text>
-				<Text type="p">
-					Maintained website and handled IT issues for a small business; gained
-					practical problem-solving experience.
-				</Text>
-			</Grid>
+			<VSpacer large />
+			<Divider />
+			<VSpacer large />
 
-			<VSpacer medium />
-
-			<Text type="h3">Education</Text>
-			<Grid>
-				<Text type="p">
-					Universitat de Barcelona — Grado en Ingeniería, Ingeniería informática
-					(Sep 2020 - Jun 2025)
-				</Text>
-				<Text type="p">
-					Australian College of Business Intelligence — Advanced Diploma in
-					Information Technology
-				</Text>
-				<Text type="p">
-					Escola Catalana Esport — Técnic Nivell 1, Vela (Jan 2021 - Mar 2021)
-				</Text>
-			</Grid>
-
-			<VSpacer medium />
-
-			<Text type="h3">Open to</Text>
-			<Text>
-				Software development roles, collaboration on web applications, algorithm
-				visualisations, and front-end work.
-			</Text>
-
-			<VSpacer medium />
-
-			<Text type="h3">Contact</Text>
-			<Grid style={{ display: "flex", alignItems: "center", gap: 12 }}>
-				<a
+			<SectionLabel>contact</SectionLabel>
+			<ContactRow>
+				<ContactLink
 					href="https://www.linkedin.com/in/carlos-chuan-5197271b1/"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					LinkedIn
-				</a>
-				<HSpacer />
-				<span>GitHub: add link</span>
-				<HSpacer />
-				<span>Email: add email</span>
-			</Grid>
+					LinkedIn ↗
+				</ContactLink>
+				<ContactLink
+					href="https://github.com/carloschuan"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					GitHub ↗
+				</ContactLink>
+				<ContactLink href="mailto:info@carloschuan.com">
+					info@carloschuan.com
+				</ContactLink>
+			</ContactRow>
 
 			<VSpacer large />
-
-			<Text type="p" style={{ color: "#444", fontSize: 13 }}>
-				Note: I used the LinkedIn content you pasted (cleaned for clarity) and
-				focused it on your software development experience. If you want exact
-				verbatim copy or different ordering (e.g., education first), tell me and
-				I will update it.
-			</Text>
-		</Grid>
+		</PageWrap>
 	);
 };

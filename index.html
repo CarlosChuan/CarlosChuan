@@ -5,6 +5,13 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon/favicon.ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>CarlosChuan Sandbox</title>
+		<script>
+			(function () {
+				var stored = localStorage.getItem("cc-theme");
+				var theme = stored === "light" ? "light" : "dark";
+				document.documentElement.setAttribute("data-theme", theme);
+			})();
+		</script>
 	</head>
 	<body style="margin: 0">
 		<div id="root"></div>

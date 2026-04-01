@@ -1,86 +1,80 @@
 import { useEffect, useMemo, useState } from "react";
-import { Grid } from "../../../../components/shared/Grid";
-import { Text } from "../../../../components/shared/Text";
-import palette from "../../../../constants/Colors";
+import styled from "styled-components";
 import { numToHex } from "../../../../helpers/strings";
 import { Instruction } from "../domains/instruction/Instruction";
 import { useRetrieveInstructionRegisters } from "../hooks/useRetrieveInstructionRegisters";
 import { useViewStyle } from "../hooks/useViewStyle";
 
+const Widget = styled.div`
+	display: flex;
+	flex-direction: column;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 8px;
+	overflow: hidden;
+	width: fit-content;
+	min-width: 200px;
+	max-height: 70vh;
+`;
+
+const WidgetHeader = styled.div`
+	background: var(--color-surface-2);
+	border-bottom: 1px solid var(--color-border);
+	padding: 5px 12px;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.68rem;
+	letter-spacing: 1.8px;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+`;
+
+const WidgetBody = styled.div`
+	overflow-y: auto;
+	padding: 4px 0;
+`;
+
+const Row = styled.div<{ $last?: boolean }>`
+	padding: 3px 12px;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.8rem;
+	color: var(--color-text);
+	text-transform: uppercase;
+	${(p) => !p.$last && `border-bottom: 1px solid var(--color-border-subtle);`}
+`;
+
 export const InstructionRegister = () => {
-  const [instructions, setInstructions] = useState<Instruction[]>([])
+	const [instructions, setInstructions] = useState<Instruction[]>([]);
+	const { data: viewStyle } = useViewStyle();
+	const { data: instructionRegister, isLoading } =
+		useRetrieveInstructionRegisters();
 
-  const { data: viewStyle } = useViewStyle();
-  const { data: instructionRegister, isLoading } = useRetrieveInstructionRegisters();
+	useEffect(() => {
+		if (instructionRegister && instructionRegister !== instructions) {
+			setInstructions(instructionRegister);
+		}
+	}, [instructionRegister]);
 
-  useEffect(() => {
-    if (instructionRegister && instructionRegister !== instructions) {
-      setInstructions(instructionRegister)
-    }
-  }, [instructionRegister])
+	const rows = useMemo(
+		() =>
+			instructions.map((instruction, idx) => ({
+				key: `ir-${viewStyle}-${idx}`,
+				text: `${numToHex(idx, instructions.length)}: ${viewStyle === "raw" ? instruction.rawInstruction : instruction.readableInstruction}`,
+				last: idx === instructions.length - 1,
+			})),
+		[instructions, viewStyle],
+	);
 
-  const rawInstructionsComponent = useMemo(() => (
-    <Grid style={{ display: "flex", flexDirection: "column", padding: "6px" }}>
-      {
-        instructions.map((instruction, idx, instructions) => {
-          const isLast = idx === instructions.length - 1;
-          return (
-            <Grid key={`ir-raw-${idx}`} style={{
-              color: palette.light.black,
-              ...(isLast ? {} :
-                {
-                  marginBottom: '2px',
-                  borderBottom: '1px solid #0000005d',
-                }
-              ),
-              textTransform: "uppercase",
-              fontFamily: "monospace"
-            }}>
-              {`${numToHex(idx, instructions.length)}: ${instruction.rawInstruction}`}
-            </Grid>
-          )
-        }
-        )
-      }
-    </Grid>
-  ), [instructions])
-
-  const readableInstructionsComponent = useMemo(() => (
-    <Grid style={{ display: "flex", flexDirection: "column", padding: "6px" }}>
-      {
-        instructions.map((instruction, idx, instructions) => {
-          const isLast = idx === instructions.length - 1;
-
-          return (
-            <Grid key={`ir-readable-${idx}`} style={{
-              color: palette.light.black,
-              ...(isLast ? {} :
-                {
-                  marginBottom: '2px',
-                  borderBottom: '1px solid #0000005d',
-                }
-              ),
-              textTransform: "uppercase",
-              fontFamily: "monospace"
-            }}>
-              {`${numToHex(idx, instructions.length)}: ${instruction.readableInstruction}`}
-            </Grid>
-          )
-        }
-        )
-      }
-    </Grid>
-  ), [instructions])
-
-  return (
-    <Grid style={{ display: "flex", flexDirection: "column", backgroundColor: palette.light.white, width: "fit-content", minWidth: "200px", maxHeight: "70vh" }}>
-      <Text style={{ color: palette.light.black, textAlign: "center" }}>
-        Instruction Register
-      </Text>
-      <Grid style={{ overflowY: "scroll" }}>
-        {isLoading && "LOADING..."}
-        {!isLoading && viewStyle === "raw" ? rawInstructionsComponent : readableInstructionsComponent}
-      </Grid>
-    </Grid >
-  )
-}
+	return (
+		<Widget>
+			<WidgetHeader>Instruction Register</WidgetHeader>
+			<WidgetBody>
+				{isLoading && <Row $last>loading…</Row>}
+				{rows.map((r) => (
+					<Row key={r.key} $last={r.last}>
+						{r.text}
+					</Row>
+				))}
+			</WidgetBody>
+		</Widget>
+	);
+};
