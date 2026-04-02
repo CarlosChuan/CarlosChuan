@@ -21,7 +21,7 @@ const WidgetHeader = styled.div`
 	background: var(--color-surface-2);
 	border-bottom: 1px solid var(--color-border);
 	padding: 5px 12px;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.68rem;
 	letter-spacing: 1.8px;
 	text-transform: uppercase;
@@ -35,7 +35,7 @@ const WidgetBody = styled.div`
 
 const Row = styled.div<{ $last?: boolean }>`
 	padding: 3px 12px;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.8rem;
 	color: var(--color-text);
 	text-transform: uppercase;

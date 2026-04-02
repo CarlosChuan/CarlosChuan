@@ -39,7 +39,7 @@ const Location = styled.p`
 	margin: 0;
 	font-size: 0.8rem;
 	color: var(--color-text-muted);
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	letter-spacing: 0.5px;
 `;
 
@@ -49,7 +49,7 @@ const SectionLabel = styled.h2`
 	font-weight: 600;
 	letter-spacing: 2px;
 	text-transform: uppercase;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	color: var(--color-primary);
 `;
 
@@ -89,7 +89,7 @@ const ExpMeta = styled.p`
 	margin: 0 0 6px;
 	font-size: 0.78rem;
 	color: var(--color-primary);
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	letter-spacing: 0.3px;
 `;
 
@@ -217,6 +217,11 @@ export const AboutMe = () => {
 			<VSpacer large />
 
 			<SectionLabel>education</SectionLabel>
+			<EduCard>
+				<EduText>
+					<EduStrong>Universitat Politècnica de Catalunya</EduStrong> — M.Eng. in Electronics · Feb 2025 – Present
+				</EduText>
+			</EduCard>
 			<EduCard>
 				<EduText>
 					<EduStrong>Universitat de Barcelona</EduStrong> — B.Eng. in Computer

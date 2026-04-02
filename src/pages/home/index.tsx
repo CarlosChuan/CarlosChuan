@@ -20,7 +20,7 @@ const HeroSection = styled.section`
 `;
 
 const Eyebrow = styled.span`
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.78rem;
 	color: var(--color-primary);
 	letter-spacing: 2.5px;
@@ -110,7 +110,7 @@ const ApproachText = styled.p`
 
 const SectionLabel = styled.p`
 	margin: 0 0 16px;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.78rem;
 	letter-spacing: 2px;
 	text-transform: uppercase;

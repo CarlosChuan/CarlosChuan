@@ -18,7 +18,7 @@ const WidgetHeader = styled.div`
 	background: var(--color-surface-2);
 	border-bottom: 1px solid var(--color-border);
 	padding: 5px 12px;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.68rem;
 	letter-spacing: 1.8px;
 	text-transform: uppercase;
@@ -27,7 +27,7 @@ const WidgetHeader = styled.div`
 
 const Value = styled.div`
 	padding: 8px 12px;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	font-size: 1rem;
 	font-weight: 600;
 	color: var(--color-primary);

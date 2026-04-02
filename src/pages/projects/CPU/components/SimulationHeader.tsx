@@ -35,7 +35,7 @@ const ToolbarBtn = styled.button`
 	background: transparent;
 	color: var(--color-text-muted);
 	font-size: 0.8rem;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	letter-spacing: 0.3px;
 	transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
 
@@ -55,7 +55,7 @@ const PlayBtn = styled.button`
 	color: #fff;
 	font-size: 0.8rem;
 	font-weight: 600;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	transition: opacity 120ms ease;
 
 	&:hover {
@@ -77,7 +77,7 @@ const ToggleCheckbox = styled.div<{ $active: boolean }>`
 const ToggleLabel = styled.span`
 	font-size: 0.78rem;
 	color: var(--color-text-muted);
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	user-select: none;
 	cursor: pointer;
 `;

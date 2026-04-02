@@ -26,7 +26,7 @@ const Section = styled.div`
 
 const SectionLabel = styled.p`
 	margin: 0 0 4px;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.68rem;
 	letter-spacing: 1.8px;
 	text-transform: uppercase;
@@ -81,7 +81,7 @@ const Label = styled.span`
 	color: var(--color-text-muted);
 	font-size: 0.82rem;
 	min-width: 60px;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 `;
 
 const NumberInput = styled.input`

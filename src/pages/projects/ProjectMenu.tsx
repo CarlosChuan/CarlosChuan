@@ -68,7 +68,7 @@ const PageSub = styled.p`
 
 const SectionLabel = styled.p`
 	margin: 0 0 14px;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.78rem;
 	letter-spacing: 2px;
 	text-transform: uppercase;
@@ -158,7 +158,7 @@ const StatusPill = styled.span<{ $status: string }>`
 	border-radius: 999px;
 	font-size: 0.7rem;
 	font-weight: 600;
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	letter-spacing: 0.4px;
 	margin-bottom: 10px;
 	color: ${(p) => statusConfig[p.$status]?.color ?? "#6b7280"};

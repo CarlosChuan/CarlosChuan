@@ -32,7 +32,7 @@ const Brand = styled.div`
 	cursor: pointer;
 	user-select: none;
 	color: var(--color-primary);
-	font-family: "Courier New", Courier, monospace;
+	font-family: var(--font-mono);
 	letter-spacing: 0.3px;
 	transition: opacity 120ms ease;
 
