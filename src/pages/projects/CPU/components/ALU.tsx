@@ -1,40 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
+import { Widget } from "../../../../components/CPU/Widget";
 import { ADD } from "../domains/instruction/Instruction";
 import { Signed8Int } from "../domains/Signed8Int";
-import { useRetrieveInstruction } from "../hooks/useRetrieveInstruction";
+import { useRetrieveCurrentInstruction } from "../hooks/useRetrieveInstruction";
 import { useRetrieveRegisterBank } from "../hooks/useRetrieveRegisterBank";
 import { useStepHandler } from "../hooks/useStepHandler";
 import { useViewStyle } from "../hooks/useViewStyle";
 
 const getOut = (inA: string, inB: string) =>
 	(parseInt(inA, 2) + parseInt(inB, 2)).toString(2).padStart(8, "0");
-
-const Widget = styled.div`
-	display: flex;
-	flex-direction: column;
-	background: var(--color-surface);
-	border: 1px solid var(--color-border);
-	border-radius: 8px;
-	overflow: hidden;
-	width: fit-content;
-	min-width: 200px;
-`;
-
-const WidgetHeader = styled.div`
-	background: var(--color-surface-2);
-	border-bottom: 1px solid var(--color-border);
-	padding: 5px 12px;
-	font-family: var(--font-mono);
-	font-size: 0.68rem;
-	letter-spacing: 1.8px;
-	text-transform: uppercase;
-	color: var(--color-text-muted);
-`;
-
-const WidgetBody = styled.div`
-	padding: 6px 0 10px;
-`;
 
 const DataRow = styled.div`
 	padding: 2px 12px;
@@ -52,7 +27,7 @@ export const ALU = () => {
 	const { data: viewStyle } = useViewStyle();
 	const { data: registerBank, setData: setRegisterBank } =
 		useRetrieveRegisterBank();
-	const { data: currInstruction } = useRetrieveInstruction();
+	const { data: currInstruction } = useRetrieveCurrentInstruction();
 
 	useEffect(() => {
 		if (currInstruction.operation !== "add") return;
@@ -103,13 +78,12 @@ export const ALU = () => {
 	);
 
 	return (
-		<Widget>
-			<WidgetHeader>ALU (adder)</WidgetHeader>
-			<WidgetBody>
+		<Widget header={"ALU (adder)"}>
+			<>
 				<DataRow>A: {display.a}</DataRow>
 				<DataRow>B: {display.b}</DataRow>
 				<DataRow>→ {display.o}</DataRow>
-			</WidgetBody>
+			</>
 		</Widget>
 	);
 };

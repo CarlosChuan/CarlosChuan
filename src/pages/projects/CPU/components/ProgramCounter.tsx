@@ -1,29 +1,8 @@
 import styled from "styled-components";
+import { Widget } from "../../../../components/CPU/Widget";
 import { bitToHex } from "../../../../helpers/strings";
 import { useRetrievePC } from "../hooks/useRetrievePC";
 import { useViewStyle } from "../hooks/useViewStyle";
-
-const Widget = styled.div`
-	display: flex;
-	flex-direction: column;
-	background: var(--color-surface);
-	border: 1px solid var(--color-border);
-	border-radius: 8px;
-	overflow: hidden;
-	width: fit-content;
-	min-width: 200px;
-`;
-
-const WidgetHeader = styled.div`
-	background: var(--color-surface-2);
-	border-bottom: 1px solid var(--color-border);
-	padding: 5px 12px;
-	font-family: var(--font-mono);
-	font-size: 0.68rem;
-	letter-spacing: 1.8px;
-	text-transform: uppercase;
-	color: var(--color-text-muted);
-`;
 
 const Value = styled.div`
 	padding: 8px 12px;
@@ -39,8 +18,7 @@ export const ProgramCounter = () => {
 	const { data: PC } = useRetrievePC();
 
 	return (
-		<Widget>
-			<WidgetHeader>Program Counter</WidgetHeader>
+		<Widget header={"Program Counter"}>
 			<Value>{viewStyle === "raw" ? PC : bitToHex(PC)}</Value>
 		</Widget>
 	);

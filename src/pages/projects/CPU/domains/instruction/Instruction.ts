@@ -9,6 +9,12 @@ const bitToOperation = {
   "10": "read",
   "11": "write",
 } as Record<string, OperationTypes>
+const operationToBits = {
+  "nop": "00",
+  "add": "01",
+  "read": "10",
+  "write": "11",
+} as Record<OperationTypes, string>
 
 interface Operation {
   type: OperationTypes;
@@ -27,6 +33,15 @@ export interface WRITE extends Operation {
   from: string;
   to: string;
 }
+
+export type InstructionGuide = (NOP | ADD | READ | WRITE) & { description: string };
+
+export const INSTRUCTIONS_OPERATIONS: InstructionGuide[] = [
+  { type: "nop", description: "No Operation instruction." },
+  { type: "add", inA: "inA", inB: "inB", out: "out", description: "Adder. Both inputs and output are registers." },
+  { type: "read", from: "from", to: "to", description: "Read from memory to register" },
+  { type: "write", from: "from", to: "to", description: "Writes from register to memory" },
+];
 
 export class Instruction {
   private _instruction: string;
@@ -109,5 +124,18 @@ export class Instruction {
   get readableInstruction(): string {
     const { type, ...params } = this.instructionObject;
     return [type, ...Object.values(params).map((val) => typeof val === "string" && bitToHex(val))].join(',')
+  }
+
+  /**
+   * 
+   * @param instruction 
+   * @returns True if valid instruction
+   */
+  static validate(instruction: string) {
+    const instructionParts = instruction.split(",")
+    if (instructionParts.length <= 0) return false;
+    const binaryType = operationToBits[instructionParts[0] as OperationTypes];
+    if (!binaryType) return false;
+    
   }
 }

@@ -1,36 +1,11 @@
 import styled from "styled-components";
+import { Widget } from "../../../../components/CPU/Widget";
 import { bitToHex } from "../../../../helpers/strings";
 import { ADD, Instruction, READ, WRITE } from "../domains/instruction/Instruction";
-import { useRetrieveInstruction } from "../hooks/useRetrieveInstruction";
+import { useRetrieveCurrentInstruction } from "../hooks/useRetrieveInstruction";
 import { useRetrieveMemoryData } from "../hooks/useRetrieveMemoryData";
 import { useRetrieveRegisterBank } from "../hooks/useRetrieveRegisterBank";
 import { useStepHandler } from "../hooks/useStepHandler";
-
-const Widget = styled.div`
-	display: flex;
-	flex-direction: column;
-	background: var(--color-surface);
-	border: 1px solid var(--color-border);
-	border-radius: 8px;
-	overflow: hidden;
-	width: fit-content;
-	min-width: 200px;
-`;
-
-const WidgetHeader = styled.div`
-	background: var(--color-surface-2);
-	border-bottom: 1px solid var(--color-border);
-	padding: 5px 12px;
-	font-family: var(--font-mono);
-	font-size: 0.68rem;
-	letter-spacing: 1.8px;
-	text-transform: uppercase;
-	color: var(--color-text-muted);
-`;
-
-const WidgetBody = styled.div`
-	padding: 6px 0 10px;
-`;
 
 const DataRow = styled.div`
 	padding: 2px 12px;
@@ -41,7 +16,7 @@ const DataRow = styled.div`
 `;
 
 export const InstructionDecoder = () => {
-	const { data: instruction } = useRetrieveInstruction();
+	const { data: instruction } = useRetrieveCurrentInstruction();
 	const { data: memoryData, setData: setMemoryData } = useRetrieveMemoryData();
 	const { data: registerBank, setData: setRegisterBank } =
 		useRetrieveRegisterBank();
@@ -122,13 +97,12 @@ export const InstructionDecoder = () => {
 	useStepHandler(readWriteHandler);
 
 	return (
-		<Widget>
-			<WidgetHeader>Instruction Decoder</WidgetHeader>
-			<WidgetBody>
+		<Widget header={"Instruction Decoder"}>
+			<>
 				{row(`Instr: ${instruction.rawInstruction}`)}
 				{row(`OP:    ${instruction.operation}`)}
 				{paramsFromOp(instruction)}
-			</WidgetBody>
-		</Widget>
+			</>
+		</Widget >
 	);
 };

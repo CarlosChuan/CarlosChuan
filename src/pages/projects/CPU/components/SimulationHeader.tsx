@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { routes, ROUTES_DICT } from "../../../../constants/Routes";
 import { useCPUContext } from "../context/context";
-import { useRetrieveInstruction } from "../hooks/useRetrieveInstruction";
+import { useRetrieveCurrentInstruction } from "../hooks/useRetrieveInstruction";
 import { useRetrieveInstructionRegisters } from "../hooks/useRetrieveInstructionRegisters";
 import { useRetrievePC } from "../hooks/useRetrievePC";
 import { useViewStyle } from "../hooks/useViewStyle";
@@ -87,7 +87,7 @@ export const SimulationHeader = () => {
 	const { data: instructionRegisters } = useRetrieveInstructionRegisters();
 	const { data: PC, setData: setPC } = useRetrievePC();
 	const { data: currInstruction, setData: setInstruction } =
-		useRetrieveInstruction();
+		useRetrieveCurrentInstruction();
 	const { data: viewStyle, setData: setViewStyle } = useViewStyle();
 
 	const navigate = useNavigate();

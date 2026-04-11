@@ -7,7 +7,7 @@ interface retrieveInstructionResponse {
   setData: (instruction: Instruction) => void;
 }
 
-export const useRetrieveInstruction = (): retrieveInstructionResponse => {
+export const useRetrieveCurrentInstruction = (): retrieveInstructionResponse => {
 
   const { state, dispatch } = useCPUContext();
 
