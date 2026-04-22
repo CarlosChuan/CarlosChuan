@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import styled from "styled-components";
 import { Widget } from "../../../../components/CPU/Widget";
 import { numToHex } from "../../../../helpers/strings";
-import { Instruction } from "../domains/instruction/Instruction";
-import { useRetrieveInstructionRegisters } from "../hooks/useRetrieveInstructionRegisters";
-import { useViewStyle } from "../hooks/useViewStyle";
+import { useViewStyle } from "../hooks/configuration/useViewStyle";
+import { useRetrieveInstructionRegister } from "../hooks/data/useRetrieveInstructionRegisters";
 
 const Row = styled.div<{ $last?: boolean }>`
 	padding: 3px 12px;
@@ -16,16 +15,11 @@ const Row = styled.div<{ $last?: boolean }>`
 `;
 
 export const InstructionRegister = () => {
-	const [instructions, setInstructions] = useState<Instruction[]>([]);
 	const { data: viewStyle } = useViewStyle();
-	const { data: instructionRegister, isLoading } =
-		useRetrieveInstructionRegisters();
+	const { data: instructionsRegister, isLoading } =
+		useRetrieveInstructionRegister();
 
-	useEffect(() => {
-		if (instructionRegister && instructionRegister !== instructions) {
-			setInstructions(instructionRegister);
-		}
-	}, [instructionRegister]);
+	const instructions = useMemo(() => instructionsRegister.instructions, [instructionsRegister])
 
 	const rows = useMemo(
 		() =>

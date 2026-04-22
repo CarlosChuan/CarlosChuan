@@ -33,12 +33,13 @@ interface WidgetProps extends React.PropsWithChildren {
 	header: string | ReactNode;
 
 	fullHeight?: boolean;
+	fullWidth?: boolean;
 }
 
 export const Widget = ({ header, children, ...styles }: WidgetProps) => {
 
 	return (
-		<WidgetContainer style={{ height: styles?.fullHeight ? "70vh" : "none" }}>
+		<WidgetContainer style={{ height: styles?.fullHeight ? "70vh" : "none", flex: styles.fullWidth ? "1" : "none" }}>
 			<WidgetHeader>{header}</WidgetHeader>
 			<WidgetBody style={{ height: styles?.fullHeight ? "100%" : "none" }}>
 				{children}

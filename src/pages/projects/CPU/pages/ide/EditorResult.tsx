@@ -1,21 +1,15 @@
-import { useEffect, useState } from "react";
 import { Widget } from "../../../../../components/CPU/Widget";
 import { TextArea } from "../../../../../components/shared/TextArea";
 
-export const EditorResult = () => {
-  const [rawInstructions, setRawInstructions] = useState<string[]>([]);
+interface EditorResultProps {
+  value: string;
+}
 
-  const onInstructionsChange = (newValue: string) => {
-    setRawInstructions(newValue.split('\n'));
-  }
-
-  useEffect(() => {
-    console.log(rawInstructions)
-  }, [rawInstructions])
+export const EditorResult = ({ value }: EditorResultProps) => {
 
   return (
-    <Widget header={"Program instructions editor"} fullHeight>
-      <TextArea style={{ resize: "none", border: "0", height: "99%", width: "100%" }} onChange={onInstructionsChange} />
+    <Widget header={"Program instructions result (errors won't be loaded)"} fullHeight fullWidth>
+      <TextArea style={{ resize: "none", border: "0", height: "99%", width: "100%" }} value={value} readOnly={true} />
     </ Widget>
   );
 }

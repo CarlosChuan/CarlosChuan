@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { CPUActionType } from "../context/actions";
-import { useCPUContext } from "../context/context";
-import { MemoryCell } from "../domains/MemoryCell";
+import { CPUActionType } from "../../context/actions";
+import { useCPUContext } from "../../context/context";
+import { MemoryCell } from "../../domains/MemoryCell";
 
 const MEMORY_PATH = "/data/cpu/memory.json"
 

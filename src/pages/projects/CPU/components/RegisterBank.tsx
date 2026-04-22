@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Widget } from "../../../../components/CPU/Widget";
-import { useRetrieveRegisterBank } from "../hooks/useRetrieveRegisterBank";
-import { useViewStyle } from "../hooks/useViewStyle";
+import { useViewStyle } from "../hooks/configuration/useViewStyle";
+import { useRetrieveRegisterBank } from "../hooks/data/useRetrieveRegisterBank";
 
 const Row = styled.div<{ $last?: boolean }>`
 	padding: 3px 12px;

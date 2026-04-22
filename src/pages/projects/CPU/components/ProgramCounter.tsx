@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Widget } from "../../../../components/CPU/Widget";
 import { bitToHex } from "../../../../helpers/strings";
-import { useRetrievePC } from "../hooks/useRetrievePC";
-import { useViewStyle } from "../hooks/useViewStyle";
+import { useViewStyle } from "../hooks/configuration/useViewStyle";
+import { useRetrievePC } from "../hooks/data/useRetrievePC";
 
 const Value = styled.div`
 	padding: 8px 12px;

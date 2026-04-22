@@ -5,7 +5,7 @@ import { InstructionRegister } from "../../components/InstructionRegister"
 import { Memory } from "../../components/Memory"
 import { ProgramCounter } from "../../components/ProgramCounter"
 import { RegisterBank } from "../../components/RegisterBank"
-import { SimulationHeader } from "../../components/SimulationHeader"
+import { SimulationHeader } from "../../components/headers/SimulationHeader"
 
 export const CPUViewer = () => {
   return (

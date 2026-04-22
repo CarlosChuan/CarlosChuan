@@ -1,5 +1,5 @@
-import { CPUActionType } from "../context/actions";
-import { useCPUContext } from "../context/context";
+import { CPUActionType } from "../../context/actions";
+import { useCPUContext } from "../../context/context";
 
 interface retrievePCResponse {
   data: string;

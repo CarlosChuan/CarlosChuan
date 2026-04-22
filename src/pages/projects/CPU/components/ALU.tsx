@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { Widget } from "../../../../components/CPU/Widget";
 import { ADD } from "../domains/instruction/Instruction";
 import { Signed8Int } from "../domains/Signed8Int";
-import { useRetrieveCurrentInstruction } from "../hooks/useRetrieveInstruction";
-import { useRetrieveRegisterBank } from "../hooks/useRetrieveRegisterBank";
-import { useStepHandler } from "../hooks/useStepHandler";
-import { useViewStyle } from "../hooks/useViewStyle";
+import { useStepHandler } from "../hooks/actions/useStepHandler";
+import { useViewStyle } from "../hooks/configuration/useViewStyle";
+import { useRetrieveCurrentInstruction } from "../hooks/data/useRetrieveInstruction";
+import { useRetrieveRegisterBank } from "../hooks/data/useRetrieveRegisterBank";
 
 const getOut = (inA: string, inB: string) =>
 	(parseInt(inA, 2) + parseInt(inB, 2)).toString(2).padStart(8, "0");

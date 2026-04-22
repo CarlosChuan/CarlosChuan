@@ -1,16 +1,27 @@
 import { Instruction } from "../instruction/Instruction";
-import { InstructionDTO } from "../instruction/InstructionDTO";
 
-export class InstructionRegisterDomain {
+const IR_SIZE = 256;
+
+export class InstructionRegister {
   private _instructions: Instruction[];
   constructor(
-    instructionsDTO: InstructionDTO[],
+    instructions: Instruction[],
   ) {
-    const instructions = instructionsDTO.map(({ instruction }) => new Instruction(instruction))
-    this._instructions = instructions;
+    if (instructions.length > IR_SIZE) {
+      throw Error("Instruction register can have up to 256 instructions.");
+    }
+    if (instructions.length < IR_SIZE) {
+      this._instructions = [...instructions, ...Array.from({ length: IR_SIZE - instructions.length }, () => Instruction.default())]
+    } else {
+      this._instructions = instructions;
+    }
   }
 
-  get instruction(): Instruction[] {
+  static default() {
+    return new InstructionRegister([]);
+  }
+
+  get instructions(): Instruction[] {
     return this._instructions;
   }
 }

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Widget } from "../../../../components/CPU/Widget";
 import { MemoryCell } from "../domains/MemoryCell";
-import { useRetrieveMemoryData } from "../hooks/useRetrieveMemoryData";
-import { useViewStyle } from "../hooks/useViewStyle";
+import { useViewStyle } from "../hooks/configuration/useViewStyle";
+import { useRetrieveMemoryData } from "../hooks/data/useRetrieveMemoryData";
 
 const Row = styled.div<{ $last?: boolean }>`
 	padding: 3px 12px;

@@ -1,4 +1,4 @@
-import { bitToHex } from "../../../../../helpers/strings";
+import { bitToHex, hexToBin } from "../../../../../helpers/strings";
 
 export const INSTRUCTION_LENGTH = 16
 
@@ -51,7 +51,7 @@ export class Instruction {
   ) {
     // Expect a predefined instruction length
     if (rawInstruction.length !== INSTRUCTION_LENGTH) {
-      throw Error(`Instruction must have length of ${INSTRUCTION_LENGTH}`)
+      throw Error(`Instruction must have length of ${INSTRUCTION_LENGTH}.`)
     }
 
     // Expect bit only values (0 | 1)
@@ -62,6 +62,104 @@ export class Instruction {
     })
 
     this._instruction = rawInstruction;
+  }
+
+  static createFromReadable(readableInstruction: string): Instruction {
+    if (!readableInstruction) {
+      // We will default an empty instruction.
+      return Instruction.default()
+    }
+    
+    const instructionParts = readableInstruction.toLowerCase().replace(' ', '').split(',')
+
+    const operationBits = operationToBits[instructionParts[0] as OperationTypes];
+
+    if (!operationBits) {
+      throw Error(`Operation ${instructionParts[0]} didn't match with any operation type.`)
+    }
+
+    let instruction: Instruction;
+
+    switch(instructionParts[0] as OperationTypes) {
+      case "nop":
+        if (instructionParts.length > 1) {
+          throw Error("NOP operation cannot have parameters.")
+        }
+        instruction = new Instruction(operationBits.padEnd(INSTRUCTION_LENGTH, '0'))
+        break;
+      case "add": {
+        if (instructionParts.length !== 4) {
+          throw Error("ADD operation must have three parameters.")
+        }
+
+        const paramsBits = instructionParts.slice(1).map((instruction) => hexToBin(instruction))
+        // Padstart to all params depending on its size
+        paramsBits[0] = paramsBits[0].padStart(6, '0') // inA: 6b
+        paramsBits[1] = paramsBits[1].padStart(6, '0') // inB: 6b
+        paramsBits[2] = paramsBits[2].padStart(2, '0') // out: 2b
+
+        if (paramsBits[0].length > 6) {
+          throw Error("ADD 'inA' param must be a hex value from 0 to 3F")
+        }
+
+        if (paramsBits[1].length > 6) {
+          throw Error("ADD 'inB' param must be a hex value from 0 to 3F")
+        }
+
+        if (paramsBits[2].length > 2) {
+          throw Error("ADD 'out' param must be a hex value from 0 to 3")
+        }
+
+        const binaryInstruction = `${operationBits}${paramsBits.join('')}`;
+        instruction = new Instruction(binaryInstruction);
+        break;
+      }
+      case "read": {
+        if (instructionParts.length !== 3) {
+          throw Error("READ operation must have two parameters.");
+        }
+
+        const paramsBits = instructionParts.slice(1).map((instruction) => hexToBin(instruction));
+        // Padstart to all params depending on its size
+        paramsBits[0] = paramsBits[0].padStart(8, '0') // from: 8b
+        paramsBits[1] = paramsBits[1].padStart(6, '0') // to: 6b
+
+        if (paramsBits[0].length > 8) {
+          throw Error("READ 'from' param must be a hex value from 0 to FF")
+        }
+
+        if (paramsBits[1].length > 6) {
+          throw Error("READ 'to' param must be a hex value from 0 to 3F")
+        }
+        
+        const binaryInstruction = `${operationBits}${paramsBits.join('')}`;
+        instruction = new Instruction(binaryInstruction);
+        break;
+      }
+      case "write": {
+        if (instructionParts.length !== 3) {
+          throw Error("WRITE operation must have two parameters.");
+        }
+
+        const paramsBits = instructionParts.slice(1).map((instruction) => hexToBin(instruction));
+        // Padstart to all params depending on its size
+        paramsBits[0] = paramsBits[0].padStart(6, '0') // from: 6b
+        paramsBits[1] = paramsBits[1].padStart(8, '0') // to: 8b
+
+        if (paramsBits[0].length > 6) {
+          throw Error("WRITE 'from' param must be a hex value from 0 to 3F")
+        }
+
+        if (paramsBits[1].length > 8) {
+          throw Error("WRITE 'to' param must be a hex value from 0 to FF")
+        }
+
+        const binaryInstruction = `${operationBits}${paramsBits.join('')}`
+        instruction = new Instruction(binaryInstruction);
+        break;
+      }
+    }
+    return instruction;
   }
 
   static default(): Instruction {
@@ -89,7 +187,7 @@ export class Instruction {
       case "add":
         const aRegister = this.rawInstruction.slice(2, 8);
         const bRegister = this.rawInstruction.slice(8, 14);
-        const outRegister = `1111${this.rawInstruction.slice(14, 16)}`;
+        const outRegister = `${this.rawInstruction.slice(14, 16)}`;
         return [aRegister, bRegister, outRegister]
       case "read":
         const fromMemory = this.rawInstruction.slice(2, 10)

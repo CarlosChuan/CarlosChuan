@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { routes, ROUTES_DICT } from "../../../../constants/Routes";
-import { useCPUContext } from "../context/context";
-import { useRetrieveCurrentInstruction } from "../hooks/useRetrieveInstruction";
-import { useRetrieveInstructionRegisters } from "../hooks/useRetrieveInstructionRegisters";
-import { useRetrievePC } from "../hooks/useRetrievePC";
-import { useViewStyle } from "../hooks/useViewStyle";
+import { routes, ROUTES_DICT } from "../../../../../constants/Routes";
+import { useCPUContext } from "../../context/context";
+import { useViewStyle } from "../../hooks/configuration/useViewStyle";
+import { useRetrieveCurrentInstruction } from "../../hooks/data/useRetrieveInstruction";
+import { useRetrieveInstructionRegister } from "../../hooks/data/useRetrieveInstructionRegisters";
+import { useRetrievePC } from "../../hooks/data/useRetrievePC";
 
 const Toolbar = styled.div`
 	display: flex;
@@ -84,7 +84,7 @@ const ToggleLabel = styled.span`
 
 export const SimulationHeader = () => {
 	const { stepCoordinator } = useCPUContext();
-	const { data: instructionRegisters } = useRetrieveInstructionRegisters();
+	const { data: instructionRegisters } = useRetrieveInstructionRegister();
 	const { data: PC, setData: setPC } = useRetrievePC();
 	const { data: currInstruction, setData: setInstruction } =
 		useRetrieveCurrentInstruction();
@@ -93,7 +93,7 @@ export const SimulationHeader = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const instruction = instructionRegisters[parseInt(PC, 2)];
+		const instruction = instructionRegisters.instructions[parseInt(PC, 2)];
 		if (!instruction || !currInstruction) return;
 		if (instruction.rawInstruction !== currInstruction?.rawInstruction) {
 			setInstruction(instruction);

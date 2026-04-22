@@ -9,5 +9,13 @@ export const numToHex = (val: number, totalVals?: number): string => {
 }
 
 export const bitToHex = (bits: string, totalVals?: number): string => {
-  return numToHex(parseInt(bits, 2), totalVals);
+  return numToHex(bitsToNum(bits), totalVals);
+}
+
+export const bitsToNum = (bits: string): number => {
+  return parseInt(bits, 2);
+}
+
+export const hexToBin = (hex: string, totalVals?: number): string => {
+  return (parseInt(hex, 16).toString(2)).padStart(8 * Math.min((totalVals ?? 1)/16, 1), '0');
 }

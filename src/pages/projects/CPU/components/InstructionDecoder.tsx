@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { Widget } from "../../../../components/CPU/Widget";
 import { bitToHex } from "../../../../helpers/strings";
 import { ADD, Instruction, READ, WRITE } from "../domains/instruction/Instruction";
-import { useRetrieveCurrentInstruction } from "../hooks/useRetrieveInstruction";
-import { useRetrieveMemoryData } from "../hooks/useRetrieveMemoryData";
-import { useRetrieveRegisterBank } from "../hooks/useRetrieveRegisterBank";
-import { useStepHandler } from "../hooks/useStepHandler";
+import { useStepHandler } from "../hooks/actions/useStepHandler";
+import { useRetrieveCurrentInstruction } from "../hooks/data/useRetrieveInstruction";
+import { useRetrieveMemoryData } from "../hooks/data/useRetrieveMemoryData";
+import { useRetrieveRegisterBank } from "../hooks/data/useRetrieveRegisterBank";
 
 const DataRow = styled.div`
 	padding: 2px 12px;

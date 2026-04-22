@@ -1,6 +1,6 @@
-import { CPUActionType } from "../context/actions";
-import { useCPUContext } from "../context/context";
-import { Instruction } from "../domains/instruction/Instruction";
+import { CPUActionType } from "../../context/actions";
+import { useCPUContext } from "../../context/context";
+import { Instruction } from "../../domains/instruction/Instruction";
 
 interface retrieveInstructionResponse {
   data: Instruction;

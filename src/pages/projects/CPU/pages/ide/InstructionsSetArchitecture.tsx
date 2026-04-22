@@ -12,9 +12,9 @@ const Row = styled.div<{ $last?: boolean }>`
     !p.$last && `border-bottom: 1px solid var(--color-border);`}
 `;
 
-export const InstructionsGuide = () => {
+export const InstructionsSetArchitecture = () => {
   return (
-    <Widget header={"Instructions guide"} >
+    <Widget header={"Instructions Set Architecture"} >
       {INSTRUCTIONS_OPERATIONS.map((instruction, idx) => {
         const { type, description, ...paramsObject } = instruction;
 

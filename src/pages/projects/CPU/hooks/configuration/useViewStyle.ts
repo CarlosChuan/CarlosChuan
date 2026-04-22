@@ -1,6 +1,6 @@
-import { CPUActionType } from "../context/actions";
-import { useCPUContext } from "../context/context";
-import { ViewStyle } from "../context/reducer";
+import { CPUActionType } from "../../context/actions";
+import { useCPUContext } from "../../context/context";
+import { ViewStyle } from "../../context/reducer";
 
 interface ViewStyleResponse {
   setData: (newViewStyle: ViewStyle) => void;
