@@ -9,28 +9,12 @@ interface EditorProps {
 
 export const Editor = ({ onChange }: EditorProps) => {
   const { data } = useRetrieveInstructionRegister();
-  const [instructions, setInstructions] = useState<(Instruction | Error)[]>([]);
+  const [_instructions, setInstructions] = useState<(Instruction | Error)[]>([]);
 
   useEffect(() => {
     setInstructions(data.instructions);
     onChange(instructionsToString(data.instructions))
   }, [data])
-
-  const onInstructionsChange = (newValue: string) => {
-    const newInstructions = stringToInstructions(newValue);
-    setInstructions(newInstructions);
-    onChange(instructionsToString(newInstructions));
-  }
-
-  const stringToInstructions = (text: string): (Instruction | Error)[] => {
-    return text.split('\n').map((textInstruction) => {
-      try {
-        return Instruction.createFromReadable(textInstruction)
-      } catch (err) {
-        return err as Error;
-      }
-    })
-  }
 
   const instructionsToString = (instrOrErrors: (Instruction | Error)[]) => {
     let lastNop: number | undefined;
