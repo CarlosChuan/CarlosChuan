@@ -83,7 +83,7 @@ const ToggleLabel = styled.span`
 `;
 
 export const SimulationHeader = () => {
-	const { stepCoordinator } = useCPUContext();
+	const { coordinator: stepCoordinator } = useCPUContext();
 	const { data: instructionRegisters } = useRetrieveInstructionRegister();
 	const { data: PC, setData: setPC } = useRetrievePC();
 	const { data: currInstruction, setData: setInstruction } =

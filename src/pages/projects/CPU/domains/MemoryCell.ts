@@ -17,6 +17,10 @@ export class MemoryCell {
     this._value = new Signed8Int(value);
   }
 
+  static default(addr: number): MemoryCell {
+    return new MemoryCell(addr, Signed8Int.default().rawInt)
+  }
+
   get addr(): number {
     return this._addr;
   }
@@ -31,7 +35,7 @@ export class MemoryCell {
     } else {
       this._value = newValue;
     }
-  }
+  } 
 
   hexAddr(totalVals?: number): string {
     return numToHex(this._addr, totalVals);

@@ -1,20 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { CPUActionType } from "../../context/actions";
-import { useCPUContext } from "../../context/context";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MemoryCell } from "../../domains/MemoryCell";
+import { MemoryBlock } from "../../domains/memoryBlock/MemoryBock";
 
 const MEMORY_PATH = "/data/cpu/memory.json"
 
 interface RetrieveMemoryDataResponse {
-  data: MemoryCell[];
+  data: MemoryBlock;
   isLoading: boolean;
   refetch: () => void;
   setData: (newData: MemoryCell[]) => void;
 }
 
 export const useRetrieveMemoryData = (): RetrieveMemoryDataResponse => {
-  const { state, dispatch } = useCPUContext();
+  const queryClient = useQueryClient();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["memory_data"],
@@ -24,38 +22,30 @@ export const useRetrieveMemoryData = (): RetrieveMemoryDataResponse => {
         const jsonData = await response.json() as string[];
         if (!Array.isArray(jsonData)) {
           console.error("Memory JSON must be an array");
-          return [];
+          return new MemoryBlock([]);
         }
         const data = jsonData.map((value, idx) => new MemoryCell(idx ,value));
-        return data;
+        const memoryBlock = new MemoryBlock(data);
+        return memoryBlock;
       } catch (error) {
-        console.error(error)
+        console.error(error);
+        return new MemoryBlock([]);
       }
     },
+    initialData: new MemoryBlock([]),
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false
   })
 
-  useEffect(() => {
-    if (data && data.map((val) => val.value.rawInt) !== state.memory.map((val) => val.value.rawInt)) {
-      dispatch({
-        type: CPUActionType.SET_MEMORY,
-        payload: data,
-      })
-    }
-  }, [data])
-
   const setData = (newData: MemoryCell[]) => {
-    dispatch({
-      type: CPUActionType.SET_MEMORY,
-      payload: newData,
-    })
+    const newMemoryBlock = new MemoryBlock(newData);
+    queryClient.setQueryData(["memory_data"], newMemoryBlock);
   }
 
   return {
-    data: state.memory,
+    data: data,
     isLoading,
     refetch,
     setData,
